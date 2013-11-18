@@ -20,7 +20,7 @@ public class MainActivity extends Activity {
   //  private ClientSender clientSender;
     private Context context;
     private Socket socket;
-    private static String SERVER_IP = "192.168.1.30";
+    private static String SERVER_IP = "89.236.29.197";
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +63,7 @@ public class MainActivity extends Activity {
             try{
 
                 if (socket == null){
-                    socket = new Socket(SERVER_IP, 21111);
+                    socket = new Socket(SERVER_IP, 21101);
                 }
                 out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
