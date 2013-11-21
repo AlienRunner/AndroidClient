@@ -6,10 +6,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import android.os.AsyncTask;
-import android.os.Bundle;
+
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
@@ -20,7 +22,7 @@ public class MainActivity extends Activity {
   //  private ClientSender clientSender;
     private Context context;
     private Socket socket;
-    private static String SERVER_IP = "89.236.29.197";
+    private static String SERVER_IP = "213.67.75.254";
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,13 @@ public class MainActivity extends Activity {
 	        //Toast.makeText(MainActivity.this, "hi", Toast.LENGTH_LONG).show();
 	      new ClientSender(context).execute(message);
 	      //clientSender.execute(message);
+	}
+	
+	public void openMap(View view){
+		Intent mapScreen = new Intent(getApplicationContext(), MyMapActivity.class);
+		startActivity(mapScreen);
+		mapScreen.putExtra("key", "value");
+		mapScreen.putExtra("email", "myemail@gmail.com");
 	}
 
 	private class ClientSender extends AsyncTask<String, Void, Socket> {

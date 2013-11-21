@@ -4,6 +4,7 @@
     <string name="app_name">AlienRunner</string>
     <string name="edit_message">Enter a Message</string>
     <string name="button_send">Send Coordinates</string>
+    <string name="button_map">Open Maps</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
