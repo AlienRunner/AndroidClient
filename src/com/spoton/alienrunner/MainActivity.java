@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -23,6 +24,8 @@ public class MainActivity extends Activity {
     private Context context;
     private Socket socket;
     private static String SERVER_IP = "213.67.75.254";
+	EditText inputName;
+	EditText inputEmail;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +33,27 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
         context = this.getApplicationContext();
         socket = null;
+        
+		inputName = (EditText) findViewById(R.id.name);
+		inputEmail = (EditText) findViewById(R.id.email);
+		Button btnNextScreen = (Button) findViewById(R.id.btnNextScreen);
+		
+		//Listening to button event
+		btnNextScreen.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View arg0) {
+				//Starting a new Intent
+				Intent nextScreen = new Intent(getApplicationContext(), MyMailActivity.class);
+				
+				//Sending data to another Activity
+				nextScreen.putExtra("name", inputName.getText().toString());
+				nextScreen.putExtra("email", inputEmail.getText().toString());
+				
+				// starting new activity
+				startActivity(nextScreen);
+				
+			}
+		});
 	}
 
 	@Override
@@ -50,8 +74,6 @@ public class MainActivity extends Activity {
 	public void openMap(View view){
 		Intent mapScreen = new Intent(getApplicationContext(), MyMapActivity.class);
 		startActivity(mapScreen);
-		mapScreen.putExtra("key", "value");
-		mapScreen.putExtra("email", "myemail@gmail.com");
 	}
 
 	private class ClientSender extends AsyncTask<String, Void, Socket> {

@@ -28,7 +28,31 @@
             android:layout_height="wrap_content"
             android:onClick="openMap"
         	android:layout_marginTop="20dip"
+        	android:layout_marginBottom="20dip"
             android:text="@string/button_map" />
+        
+        <TextView android:layout_width="fill_parent"
+    		android:layout_height="wrap_content"
+    		android:text="Name: "/>
+	    <EditText android:id="@+id/name" 
+    		android:layout_width="fill_parent"
+    		android:layout_height="wrap_content"
+    		android:layout_marginBottom="10dip"/>  
+        
+        <TextView  
+		    android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content" 
+		    android:text="Email: "/>
+	    <EditText android:id="@+id/email" 
+	    		android:layout_width="fill_parent"
+	    		android:layout_height="wrap_content"/>
+	    
+	    <Button android:id="@+id/btnNextScreen"
+	     		android:layout_width="wrap_content"
+	    		android:layout_height="wrap_content"
+	    		android:text="Send to Next Screen"
+	    		android:layout_marginTop="15dip"
+	    		android:layout_marginBottom="20dip"/>
 
 <!--     </LinearLayout> -->
 
