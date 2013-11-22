@@ -7,9 +7,13 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -26,6 +30,7 @@ public class MainActivity extends Activity {
     private static String SERVER_IP = "213.67.75.254";
 	EditText inputName;
 	EditText inputEmail;
+	private LocationManager locMan;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +42,7 @@ public class MainActivity extends Activity {
 		inputName = (EditText) findViewById(R.id.name);
 		inputEmail = (EditText) findViewById(R.id.email);
 		Button btnNextScreen = (Button) findViewById(R.id.btnNextScreen);
+		
 		
 		//Listening to button event
 		btnNextScreen.setOnClickListener(new View.OnClickListener() {
@@ -63,13 +69,23 @@ public class MainActivity extends Activity {
 		return true;
 	}
 	
-	public void sendMessage(View view){
-	      EditText editText = (EditText) findViewById(R.id.edit_message);
-	      message = editText.getText().toString() + System.getProperty("line.separator"); //Line separator or the server's BufferedReader in.readLine() in will hang forever
-	        //Toast.makeText(MainActivity.this, "hi", Toast.LENGTH_LONG).show();
-	      new ClientSender(context).execute(message);
-	      //clientSender.execute(message);
+	public void sendMessage(View view) {
+		// EditText editText = (EditText) findViewById(R.id.edit_message);
+		// message = editText.getText().toString() +
+		// System.getProperty("line.separator"); //Line separator or the
+		// server's BufferedReader in.readLine() in will hang forever
+		locMan = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		Location lastLoc = locMan
+				.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		double lat = lastLoc.getLatitude();
+		double lng = lastLoc.getLongitude();
+		LatLng lastLatLng = new LatLng(lat, lng);
+		message = lastLatLng.toString() + System.getProperty("line.separator");
+		// Toast.makeText(MainActivity.this, "hi", Toast.LENGTH_LONG).show();
+		new ClientSender(context).execute(message);
+		// clientSender.execute(message);
 	}
+	
 	
 	public void openMap(View view){
 		Intent mapScreen = new Intent(getApplicationContext(), MyMapActivity.class);

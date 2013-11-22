@@ -5,11 +5,11 @@
     android:orientation="vertical"
     >
     
-    <EditText
-        android:id="@+id/edit_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="@string/edit_message" />
+<!--     <EditText -->
+<!--         android:id="@+id/edit_message" -->
+<!--         android:layout_width="wrap_content" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:hint="@string/edit_message" /> -->
     
     <Button
         android:layout_width="wrap_content"
@@ -42,7 +42,7 @@
         <TextView  
 		    android:layout_width="fill_parent" 
 		    android:layout_height="wrap_content" 
-		    android:text="Email: "/>
+		    android:text="Password: "/>
 	    <EditText android:id="@+id/email" 
 	    		android:layout_width="fill_parent"
 	    		android:layout_height="wrap_content"/>
@@ -50,7 +50,7 @@
 	    <Button android:id="@+id/btnNextScreen"
 	     		android:layout_width="wrap_content"
 	    		android:layout_height="wrap_content"
-	    		android:text="Send to Next Screen"
+	    		android:text="Login"
 	    		android:layout_marginTop="15dip"
 	    		android:layout_marginBottom="20dip"/>
 
