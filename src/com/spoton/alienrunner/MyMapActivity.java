@@ -26,14 +26,13 @@ public class MyMapActivity extends FragmentActivity {
 	private Marker johanMarker;
 	private Marker perMarker;
 	private Marker jockeMarker;
-	private Marker jonathanMarker;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_my_map);
 		
-		userIcon = R.drawable.red_point;
+		userIcon = R.drawable.arnold_point;
 		alienIcon = R.drawable.alien_point;
 		foodIcon = R.drawable.red_point;
 		drinkIcon = R.drawable.blue_point;
@@ -77,7 +76,7 @@ public class MyMapActivity extends FragmentActivity {
 		if(emilMarker!=null) emilMarker.remove();
 		emilMarker = theMap.addMarker(new MarkerOptions()
 		    .position(new LatLng(55.715339,13.210391))
-		    .title("Emil are here")
+		    .title("Emil is here")
 		    .icon(BitmapDescriptorFactory.fromResource(alienIcon))
 		    .snippet("Emils location"));
 		
@@ -85,7 +84,7 @@ public class MyMapActivity extends FragmentActivity {
 		if(johanMarker!=null) johanMarker.remove();
 		johanMarker = theMap.addMarker(new MarkerOptions()
 		    .position(new LatLng(55.712994,13.210584))
-		    .title("Johan are here")
+		    .title("Johan is here")
 		    .icon(BitmapDescriptorFactory.fromResource(alienIcon))
 		    .snippet("Johans location"));
 		
@@ -93,7 +92,7 @@ public class MyMapActivity extends FragmentActivity {
 		if(perMarker!=null) perMarker.remove();
 		perMarker = theMap.addMarker(new MarkerOptions()
 		    .position(new LatLng(55.715278,13.214339))
-		    .title("Per are here")
+		    .title("Per is here")
 		    .icon(BitmapDescriptorFactory.fromResource(alienIcon))
 		    .snippet("Pers location"));
 		
@@ -101,7 +100,7 @@ public class MyMapActivity extends FragmentActivity {
 		if(jockeMarker!=null) jockeMarker.remove();
 		jockeMarker = theMap.addMarker(new MarkerOptions()
 		    .position(new LatLng(55.713163,13.214897))
-		    .title("Jocke are here")
+		    .title("Jocke is here")
 		    .icon(BitmapDescriptorFactory.fromResource(alienIcon))
 		    .snippet("Jockes location"));
 	}
