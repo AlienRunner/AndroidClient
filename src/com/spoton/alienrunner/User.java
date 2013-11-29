@@ -1,15 +1,12 @@
 package com.spoton.alienrunner;
 
-public class Users {
+public class User {
 	
 	private String userId;
 	private double xCoord;
 	private double yCoord;
 	
-	
-
-
-	public Users(String userId, double xCoord, double yCoord ){
+	public User(String userId, double xCoord, double yCoord ){
 		this.userId = userId;
 		this.xCoord = xCoord;
 		this.yCoord = yCoord;
