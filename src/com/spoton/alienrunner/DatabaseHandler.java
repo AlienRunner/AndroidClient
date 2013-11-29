@@ -9,5 +9,8 @@ public class DatabaseHandler implements DatabaseHandlerInterface{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	private ArrayList<User> JsonToUser(String json){
+		return null;
+	}
 
 }
