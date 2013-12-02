@@ -23,12 +23,12 @@ public class MyMapActivity extends FragmentActivity {
 	private LocationManager locMan;
 	private Marker userMarker;
 	private Marker emilMarker;
-	private Marker johanMarker;
-	private Marker perMarker;
-	private Marker jockeMarker;
+	private User myUser;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		myUser = new User("Mitt anvNamn", 0, 0);
+		locMan = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_my_map);
 		
@@ -53,24 +53,14 @@ public class MyMapActivity extends FragmentActivity {
 				updatePlaces();
 			}
 		}
+		MapHandler handler = new MapHandler(theMap, locMan, null, myUser);
+		//handler.gpsUpdate();
 	}
 
 	private void updatePlaces(){
 		//update location
-		locMan = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-		Location lastLoc = locMan.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		double lat = lastLoc.getLatitude();
-		double lng = lastLoc.getLongitude();
-		LatLng lastLatLng = new LatLng(lat, lng);
 		
-		// UserLocation
-		if(userMarker!=null) userMarker.remove();
-		userMarker = theMap.addMarker(new MarkerOptions()
-		    .position(lastLatLng)
-		    .title("You are here")
-		    .icon(BitmapDescriptorFactory.fromResource(userIcon))
-		    .snippet("Your last recorded location"));
-		theMap.animateCamera(CameraUpdateFactory.newLatLng(lastLatLng), 3000, null);
+
 		
 		// EmilLocation
 		if(emilMarker!=null) emilMarker.remove();
@@ -80,29 +70,7 @@ public class MyMapActivity extends FragmentActivity {
 		    .icon(BitmapDescriptorFactory.fromResource(alienIcon))
 		    .snippet("Emils location"));
 		
-		// JohanLocation
-		if(johanMarker!=null) johanMarker.remove();
-		johanMarker = theMap.addMarker(new MarkerOptions()
-		    .position(new LatLng(55.712994,13.210584))
-		    .title("Johan is here")
-		    .icon(BitmapDescriptorFactory.fromResource(alienIcon))
-		    .snippet("Johans location"));
-		
-		// PerLocation
-		if(perMarker!=null) perMarker.remove();
-		perMarker = theMap.addMarker(new MarkerOptions()
-		    .position(new LatLng(55.715278,13.214339))
-		    .title("Per is here")
-		    .icon(BitmapDescriptorFactory.fromResource(alienIcon))
-		    .snippet("Pers location"));
-		
-		//JockeLocation
-		if(jockeMarker!=null) jockeMarker.remove();
-		jockeMarker = theMap.addMarker(new MarkerOptions()
-		    .position(new LatLng(55.713163,13.214897))
-		    .title("Jocke is here")
-		    .icon(BitmapDescriptorFactory.fromResource(alienIcon))
-		    .snippet("Jockes location"));
+	
 	}
 	
 	@Override

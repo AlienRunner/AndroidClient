@@ -41,5 +41,17 @@ public class User {
 		this.yCoord = yCoord;
 	}
 
+	public boolean equals(User b) {
+		if(b.getUserId().equals(userId)){
+			return true;
+		}else{ 
+			return false;
+		}
+	}
+
+	@Override public boolean equals(Object o) {
+	    if (!(o instanceof User)) return false;
+	    return equals((User)o);
+	}
 
 }
