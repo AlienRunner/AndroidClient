@@ -6,6 +6,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+<<<<<<< HEAD
+=======
+import com.google.gson.*;
+
+>>>>>>> 2a2d11565c64dd2944f43705c9549a408371b4c6
 public class DatabaseHandler implements DatabaseHandlerInterface {
 	private String message;
 
