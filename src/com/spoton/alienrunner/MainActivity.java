@@ -23,19 +23,21 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
-    private String message;
-  //  private ClientSender clientSender;
     private Context context;
 	EditText inputName;
 	EditText inputEmail;
-	private LocationManager locMan;
+//	private LocationManager locMan;
+	ClientSender cs;
+	DatabaseHandler dh;
+	
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
         context = this.getApplicationContext();
-        
+        cs = new ClientSender(context);
+        dh = new DatabaseHandler(cs);
 		inputName = (EditText) findViewById(R.id.name);
 		inputEmail = (EditText) findViewById(R.id.email);
 		Button btnNextScreen = (Button) findViewById(R.id.btnNextScreen);
@@ -43,7 +45,6 @@ public class MainActivity extends Activity {
 		
 		//Listening to button event
 		btnNextScreen.setOnClickListener(new View.OnClickListener() {
-			
 			public void onClick(View arg0) {
 				//Starting a new Intent
 				Intent nextScreen = new Intent(getApplicationContext(), MyMailActivity.class);
@@ -71,20 +72,25 @@ public class MainActivity extends Activity {
 		// message = editText.getText().toString() +
 		// System.getProperty("line.separator"); //Line separator or the
 		// server's BufferedReader in.readLine() in will hang forever
-		locMan = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		Location lastLoc = locMan
-				.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		double lat = lastLoc.getLatitude();
-		double lng = lastLoc.getLongitude();
-		LatLng lastLatLng = new LatLng(lat, lng);
-		message = lastLatLng.toString() + System.getProperty("line.separator");
-		// Toast.makeText(MainActivity.this, "hi", Toast.LENGTH_LONG).show();
-		new ClientSender(context).execute(message);
+//		locMan = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//		Location lastLoc = locMan
+//				.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+//		double lat = lastLoc.getLatitude();
+//		double lng = lastLoc.getLongitude();
+//		LatLng lastLatLng = new LatLng(lat, lng);
+//		message = lastLatLng.toString() + System.getProperty("line.separator");
+//		dh.sendMessage("___HŠr kommer ett meddelande!___");
+//		new ClientSender(context).execute(message);
 		// clientSender.execute(message);
+//		cs.sendMessage("THIS IS message_______");
+//		Toast.makeText(MainActivity.this, "hi", Toast.LENGTH_LONG).show();
+		User myUser = new User("Johan", 55, 44);
+		cs.setAndFetch(myUser);
 	}
 	
 	public void openMap(View view){
 		Intent mapScreen = new Intent(getApplicationContext(), MyMapActivity.class);
+//		mapScreen.putExtra("ClientSender", cs);
 		startActivity(mapScreen);
 	}
 

@@ -12,6 +12,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import android.location.Location;
 import android.location.LocationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -31,7 +32,9 @@ public class MyMapActivity extends FragmentActivity {
 		locMan = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_my_map);
-		
+//		Intent i = getIntent();
+//		ClientSender cs = (ClientSender)i.getSerializableExtra("ClientSender");
+//		System.out.println("__SERVER_IP:___" + cs.SERVER_IP);
 		userIcon = R.drawable.arnold_point;
 		alienIcon = R.drawable.alien_point;
 		foodIcon = R.drawable.red_point;
