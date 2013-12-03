@@ -26,8 +26,6 @@ public class MainActivity extends Activity {
     private String message;
   //  private ClientSender clientSender;
     private Context context;
-    private Socket socket;
-    private static String SERVER_IP = "213.67.75.254";
 	EditText inputName;
 	EditText inputEmail;
 	private LocationManager locMan;
@@ -37,7 +35,6 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
         context = this.getApplicationContext();
-        socket = null;
         
 		inputName = (EditText) findViewById(R.id.name);
 		inputEmail = (EditText) findViewById(R.id.email);
@@ -86,54 +83,9 @@ public class MainActivity extends Activity {
 		// clientSender.execute(message);
 	}
 	
-	
 	public void openMap(View view){
 		Intent mapScreen = new Intent(getApplicationContext(), MyMapActivity.class);
 		startActivity(mapScreen);
 	}
 
-	private class ClientSender extends AsyncTask<String, Void, Socket> {
-        //private Socket socket;
-        private String answer;
-        private Context context;
-        private BufferedWriter out;
-        private BufferedReader in;
-
-
-        public ClientSender(Context context){
-            this.context = context;
-
-        }
-
-        @Override
-        protected Socket doInBackground(String... params) {
-            try{
-
-                if (socket == null){
-                    socket = new Socket(SERVER_IP, 21101);
-                }
-                out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                out.write(params[0]);
-                out.flush();
-
-                answer = in.readLine() + System.getProperty("line.separator");
-                return socket;
-
-            }catch (IOException e){
-                e.printStackTrace();
-            }
-            return socket;
-        }
-        protected void onPostExecute(Socket socket) {
-            if (socket != null) {
-                Toast.makeText(context, answer, Toast.LENGTH_LONG).show();
-
-            } else {
-                Toast.makeText(context, "Can't connect to server!",
-                        Toast.LENGTH_LONG).show();
-            }
-
-        }
-    }
 }
