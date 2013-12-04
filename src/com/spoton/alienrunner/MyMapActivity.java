@@ -32,9 +32,18 @@ public class MyMapActivity extends FragmentActivity {
 		locMan = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_my_map);
-//		Intent i = getIntent();
+		Intent i = getIntent();
 //		ClientSender cs = (ClientSender)i.getSerializableExtra("ClientSender");
 //		System.out.println("__SERVER_IP:___" + cs.SERVER_IP);
+		
+		// Test code by Hector with String
+		//String cs = i.getStringExtra("ClientSender");
+		//System.out.println("__TestString:___" + cs);
+		
+		// Test code by Hector with User object - Serializable
+		//User cs = (User) i.getSerializableExtra("ClientSender");
+		//System.out.println("__UserString:___" + cs.getUserId() + "_" + cs.getxCoord());
+		
 		userIcon = R.drawable.arnold_point;
 		alienIcon = R.drawable.alien_point;
 		foodIcon = R.drawable.red_point;

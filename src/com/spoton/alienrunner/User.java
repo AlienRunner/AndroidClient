@@ -1,6 +1,8 @@
 package com.spoton.alienrunner;
 
-public class User {
+//import java.io.Serializable;
+
+public class User {//implements Serializable{
 	
 	private String userId;
 	private double xCoord;

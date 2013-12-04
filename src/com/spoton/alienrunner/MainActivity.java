@@ -22,7 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity{
     private Context context;
 	EditText inputName;
 	EditText inputEmail;
@@ -90,7 +90,9 @@ public class MainActivity extends Activity {
 	
 	public void openMap(View view){
 		Intent mapScreen = new Intent(getApplicationContext(), MyMapActivity.class);
-//		mapScreen.putExtra("ClientSender", cs);
+		//mapScreen.putExtra("ClientSender", cs);
+		//mapScreen.putExtra("ClientSender", "testString");
+		//mapScreen.putExtra("ClientSender", new User("Hector", 10, 10));
 		startActivity(mapScreen);
 	}
 
