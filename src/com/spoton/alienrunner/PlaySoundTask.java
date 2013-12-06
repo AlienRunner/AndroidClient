@@ -13,9 +13,9 @@ public class PlaySoundTask extends AsyncTask<ClientSender, Void, Boolean>{
 	protected Boolean doInBackground(ClientSender... params) {
 		ClientSender cs = params[0];
 		String distance = cs.getLeastDistance();
-		int sleep = timeToSleep(distance);
+		int timeToSleep = timeToSleep(distance);
 		try {
-			this.wait((long) sleep);
+			this.wait((long) timeToSleep);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -38,20 +38,12 @@ public class PlaySoundTask extends AsyncTask<ClientSender, Void, Boolean>{
 		}
 		mp.start();
 		while(mp.isPlaying()){
-			try {
-				Thread.sleep((long) (mp.getDuration() + sleep));
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
 			
 		}
-		PlaySoundTask task = new PlaySoundTask();
-		task.doInBackground(cs);
 		
-		return true;
 		
+		
+		return null;
 	}
 	
 	//Return a value in seconds

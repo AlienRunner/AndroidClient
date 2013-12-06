@@ -8,11 +8,9 @@ public class alienLocationListener implements android.location.LocationListener{
 		
 	public alienLocationListener(MapHandler mapHandler){
 		this.handler = mapHandler;
-		System.out.println("itiated a Listener");
 	}
 	@Override
 	public void onLocationChanged(Location location) {
-			System.out.println("UPPDATTERAR");
 			handler.gpsUpdate(location);
 	}
 	@Override
