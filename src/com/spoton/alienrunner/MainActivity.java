@@ -24,13 +24,9 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 	// private Context context;
 	EditText inputName;
-
-	enum APP_MODE {
-		NOT_SET, ALIEN, HUMAN
-	};
-
 	Button b1;
 	Button b2;
+	String race = null;
 
 	// EditText inputEmail;
 	// private LocationManager locMan;
@@ -41,7 +37,6 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		APP_MODE mode = APP_MODE.NOT_SET;
 		b1 = (Button) findViewById(R.id.button_alien);
 		b2 = (Button) findViewById(R.id.button_human);
 
@@ -74,6 +69,7 @@ public class MainActivity extends Activity {
 		if (b1.isSelected() == false) {
 			b1.setSelected(true);
 			b2.setSelected(false);
+			this.race = "Alien";
 			b1.setBackgroundResource(R.drawable.alien_button_selected);
 			b2.setBackgroundResource(R.drawable.human_button);
 		}
@@ -83,6 +79,7 @@ public class MainActivity extends Activity {
 		if (b2.isSelected() == false) {
 			b1.setSelected(false);
 			b2.setSelected(true);
+			this.race = "Marines";
 			b1.setBackgroundResource(R.drawable.alien_button);
 			b2.setBackgroundResource(R.drawable.human_button_selected);
 		}
@@ -119,12 +116,15 @@ public class MainActivity extends Activity {
 //	}
 
 	public void openMap(View view) {
-		System.out.println("___Opening map!__");
-		Intent mapScreen = new Intent(getApplicationContext(),
-				MyMapActivity.class);
-		mapScreen.putExtra("race", inputName.getText().toString());
-		mapScreen.putExtra("name", inputName.getText().toString());
-		startActivity(mapScreen);
+		if(this.race == null){
+			System.out.println("___Choose race!__");
+		}else{
+			System.out.println("___Opening map!__");
+			Intent mapScreen = new Intent(getApplicationContext(), MyMapActivity.class);
+			mapScreen.putExtra("race", this.race);
+			mapScreen.putExtra("name", inputName.getText().toString());
+			startActivity(mapScreen);
+		}
 	}
 
 }
