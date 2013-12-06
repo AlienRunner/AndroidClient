@@ -28,15 +28,16 @@ public class MyMapActivity extends FragmentActivity {
 	private Marker emilMarker;
 	private User myUser;
 	private Context context;
+	private LocationManager manager;
 	ClientSender cs;
 	ArrayList<User> userList;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		myUser = new User("Mitt anvNamn", 0, 0, "Alien");
-		locMan = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_my_map);
+		
+		locMan = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		
 		context = this.getApplicationContext();
         cs = new ClientSender(context);
@@ -47,48 +48,22 @@ public class MyMapActivity extends FragmentActivity {
 		drinkIcon = R.drawable.blue_point;
 		shopIcon = R.drawable.green_point;
 		otherIcon = R.drawable.purple_point;
+		
 		Intent i = getIntent();
 		String name = i.getStringExtra("name");
 		System.out.println("________NAME: " + name);
-		User myUser = new User("Johan", 99, 88, "Alien");
+
+		//TODO TAG BORT
 		userList = cs.setAndFetch(myUser);
 		System.out.println("________USERLIST: " + userList);
-		
-//		if(theMap==null){
-////		    //map not instantiated yet
-//			FragmentManager fmanager = getSupportFragmentManager();
-//			Fragment fragment = fmanager.findFragmentById(R.id.map);
-//	        SupportMapFragment supportmapfragment = (SupportMapFragment)fragment;
-//	        theMap = supportmapfragment.getMap();
-////            theMap.addMarker(new MarkerOptions()
-////            .position(new LatLng(32.1275701, 34.7983432))
-////            .title("Hello world"));
-//			if(theMap != null){
-//				theMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-//				updatePlaces();
-//			}
-//		}
+		System.out.println("Creating MapHandler");
+		manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		MapHandler handler = new MapHandler(theMap, cs, myUser);
+		alienLocationListener listener = new alienLocationListener(handler);
+		manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, listener);
 		
 		
-		//TODO Databasehandler depricated??? Insert CLientSender to DatabaseHandler.
-		MapHandler handler = new MapHandler(theMap, locMan, cs, myUser);
-//		handler.gpsUpdate();
-	}
-
-	private void updatePlaces(){
-		//update location
 		
-
-		
-		// EmilLocation
-		if(emilMarker!=null) emilMarker.remove();
-		emilMarker = theMap.addMarker(new MarkerOptions()
-		    .position(new LatLng(55.715339,13.210391))
-		    .title("Emil is here")
-		    .icon(BitmapDescriptorFactory.fromResource(alienIcon))
-		    .snippet("Emils location"));
-		
-	
 	}
 	
 	@Override
