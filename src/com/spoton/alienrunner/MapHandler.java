@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Bundle;
 
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
@@ -28,19 +30,13 @@ public class MapHandler {
 	private ArrayList<User> oponentList;
 	private HashMap<User, Marker> markersList;
 
-	MapHandler(GoogleMap theMap, LocationManager locManager,
-			ClientSender clientSender, User myuser) {
+	MapHandler(GoogleMap theMap, ClientSender clientSender, User myuser) {
 
 		this.map = theMap;
-		this.locMan = locManager;
 		this.cs = clientSender;
 		this.myUser = myuser;
-		locationListener = new alienLocationListener(this);
 		markersList = new HashMap<User, Marker>(); 
-		// Activates an listener that runs each time a new gps location is
-		// provided
-		locMan.requestLocationUpdates(locMan.GPS_PROVIDER, 0, 0,
-				locationListener);
+
 	}
 
 	// Is run by the listener eachtime a gps update is made.
@@ -68,7 +64,7 @@ public class MapHandler {
 		map.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(location
 				.getLatitude(), location.getLongitude())), 3000, null);
 
-		updatePlayers();
+		//updatePlayers();
 	}
 
 	// Fetch Updates from server and update all players and markers;
@@ -125,11 +121,11 @@ public class MapHandler {
 			// Make list update;
 			oponentList = updatedOponentList;
 			
-			
 
 		} else {
 			System.out.println("No List was sent to device");
 		}
 
 	}
+
 }
