@@ -39,7 +39,7 @@ public class ClientSender extends AsyncTask<String, Void, String> implements Ser
     }
     
 	public ArrayList<User> setAndFetch(User myUser) {
-		String userString =  "["+myUser.getUserId()+","+myUser.getxCoord()+","+myUser.getyCoord()+"]";
+		String userString = "1" + "["+myUser.getUserId()+","+myUser.getxCoord()+","+myUser.getyCoord()+"]";
 		String answer = sendMessage(userString);
 		System.out.println("__This was the answer:__" + answer);
 //		return null;
@@ -47,6 +47,7 @@ public class ClientSender extends AsyncTask<String, Void, String> implements Ser
 		return jsonToUser(answer);
 		
 	}
+	
 
 	//på något sätt få strängen som skickats ifrån servern till sträng databaseString
 	private ArrayList<User> jsonToUser(String answer){
@@ -58,8 +59,8 @@ public class ClientSender extends AsyncTask<String, Void, String> implements Ser
 		databaseString = databaseString.replace("\"", "");
 		String[] b = databaseString.split(",");
 		ArrayList<User> list = new ArrayList<User>();
-		for(int i =0; i<b.length-1; i+=3){
-			User u = new User(b[i],Double.parseDouble(b[i+1]),Double.parseDouble(b[i+2]));
+		for(int i =0; i<b.length-1; i+=4){
+			User u = new User(b[i],Double.parseDouble(b[i+1]),Double.parseDouble(b[i+2]), b[i+3]);
 			list.add(u);
 		}
 		return list;

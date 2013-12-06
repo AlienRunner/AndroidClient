@@ -7,11 +7,14 @@ public class User {//implements Serializable{
 	private String userId;
 	private double xCoord;
 	private double yCoord;
+	private String race;
 	
-	public User(String userId, double xCoord, double yCoord ){
+	public User(String userId, double xCoord, double yCoord, String race ){
 		this.userId = userId;
 		this.xCoord = xCoord;
 		this.yCoord = yCoord;
+		this.race = race;
+		
 		
 	}
 	public String getUserId() {
@@ -42,6 +45,14 @@ public class User {//implements Serializable{
 	public void setyCoord(double yCoord) {
 		this.yCoord = yCoord;
 	}
+	
+	public String getRace(){
+		return race;
+	}
+	public void setRace(String race){
+		this.race = race;
+	}
+	
 
 	public boolean equals(User b) {
 		if(b.getUserId().equals(userId)){
