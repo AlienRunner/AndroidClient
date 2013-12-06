@@ -7,15 +7,19 @@ import android.os.AsyncTask;
 import android.support.v4.content.AsyncTaskLoader;
 
 public class PlaySoundTask extends AsyncTask<ClientSender, Void, Boolean>{
-
+	private User myUser;
+	
+	public PlaySoundTask(User myUser){
+		this.myUser = myUser;
+	}
 
 	@Override
 	protected Boolean doInBackground(ClientSender... params) {
 		ClientSender cs = params[0];
-		String distance = cs.getLeastDistance();
-		int timeToSleep = timeToSleep(distance);
+		double leastdistance = cs.getLeastDistance(myUser, cs.setAndFetch(myUser));
+		double timeToSleep = timeToSleep(leastdistance);
 		try {
-			Thread.sleep(timeToSleep);
+			Thread.sleep((long) timeToSleep);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -41,11 +45,11 @@ public class PlaySoundTask extends AsyncTask<ClientSender, Void, Boolean>{
 	}
 	
 	//Return a value in seconds
-	private int timeToSleep(String distance){
-		if(Integer.getInteger(distance) > 700){
+	private double timeToSleep(double distance){
+		if(distance > 700){
 			return 7000; 
 		}else{
-			return Integer.parseInt(distance)*10;
+			return (distance*10);
 		}
 		
 		

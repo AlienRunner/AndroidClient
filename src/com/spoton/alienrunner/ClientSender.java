@@ -14,14 +14,15 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
-public class ClientSender extends AsyncTask<String, Void, String> implements Serializable {
+public class ClientSender extends AsyncTask<String, Void, String> implements
+		Serializable {
+
+	private static final long serialVersionUID = 1L;
 	private Socket socket;
 	public static String SERVER_IP = "213.67.75.254";
 	private Context context;
 	private BufferedWriter out;
 	private BufferedReader in;
-
-	// private String answer;
 
 	public ClientSender(Context context) {
 		this.context = context;
@@ -39,21 +40,21 @@ public class ClientSender extends AsyncTask<String, Void, String> implements Ser
 	}
 
 	public ArrayList<User> setAndFetch(User myUser) {
-		String userString = "[" + myUser.getUserId() + ","
-				+ myUser.getxCoord() + "," + myUser.getyCoord() + "," + myUser.getRace() + "]";
+		String userString = "[" + myUser.getUserId() + "," + myUser.getxCoord()
+				+ "," + myUser.getyCoord() + "," + myUser.getRace() + "]";
 		String answer = sendMessage(userString);
 		System.out.println("__This was the answer:__" + answer);
-		// return null;
 
 		return jsonToUser(answer);
 
 	}
+
 	//
-//	public void insertUser(String userName, String race) {
-//		String userString = "1" + "[" + userName + "," + "0.0" + "," + "0.0"
-//				+ "," + race + "]";
-//		sendMessage(userString);
-//	}
+	// public void insertUser(String userName, String race) {
+	// String userString = "1" + "[" + userName + "," + "0.0" + "," + "0.0"
+	// + "," + race + "]";
+	// sendMessage(userString);
+	// }
 
 	// på något sätt få strängen som skickats ifrån servern till sträng
 	// databaseString
@@ -83,10 +84,8 @@ public class ClientSender extends AsyncTask<String, Void, String> implements Ser
 			if (socket == null) {
 				socket = new Socket(SERVER_IP, 21101);
 			}
-			out = new BufferedWriter(new OutputStreamWriter(
-					socket.getOutputStream()));
-			in = new BufferedReader(new InputStreamReader(
-					socket.getInputStream()));
+			out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			out.write(params[0]);
 			out.flush();
 
@@ -104,8 +103,8 @@ public class ClientSender extends AsyncTask<String, Void, String> implements Ser
 	protected void onPostExecute(String response) {
 		if (response != null) {
 			System.out.println("ONPOSTEXCECUTE" + response);
-			// this.answer = response;
-			// Toast.makeText(context, answer, Toast.LENGTH_LONG).show();
+			Toast.makeText(context, "Connected to server!",
+					Toast.LENGTH_LONG).show();
 
 		} else {
 			System.out.println("ONPOSTEXCECUTEERROR" + response);
@@ -121,41 +120,44 @@ public class ClientSender extends AsyncTask<String, Void, String> implements Ser
 		double x1 = currUser.getxCoord();
 		double y1 = currUser.getyCoord();
 		User listUser = null;
-		while(iter.hasNext()){
+		while (iter.hasNext()) {
 			User tempUser = iter.next();
 			double x2 = tempUser.getxCoord();
 			double y2 = tempUser.getyCoord();
 			double tempDist = getDistance(x1, y1, x2, y2);
-			if(tempDist < dist){
+			if (tempDist < dist) {
 				dist = tempDist;
 				listUser = tempUser;
 			}
 		}
 		return listUser;
 	}
-	
+
 	public double getLeastDistance(User currUser, ArrayList<User> userList) {
 		Iterator<User> iter = userList.iterator();
 		double dist = Double.MAX_VALUE;
 		double x1 = currUser.getxCoord();
 		double y1 = currUser.getyCoord();
 		User listUser = null;
-		while(iter.hasNext()){
+		while (iter.hasNext()) {
 			User tempUser = iter.next();
 			double x2 = tempUser.getxCoord();
 			double y2 = tempUser.getyCoord();
 			double tempDist = getDistance(x1, y1, x2, y2);
-			if(tempDist < dist){
+			if (tempDist < dist) {
 				dist = tempDist;
 				listUser = tempUser;
 			}
 		}
 		return dist;
 	}
-	
-	private double getDistance(double x1, double y1, double x2, double y2){
-		return 2.0;
+
+	private double getDistance(double x1, double y1, double x2, double y2) {
+		double theDistance = (Math.sin(Math.toRadians(x1))
+				* Math.sin(Math.toRadians(x2)) + Math.cos(Math.toRadians(x1))
+				* Math.cos(Math.toRadians(x2))
+				* Math.cos(Math.toRadians(y1 - y2)));
+		return (Math.toDegrees(Math.acos(theDistance)) * 69.09 * 1.6093);
+//		return (Math.toDegrees(Math.acos(theDistance)) * 69.09 * 1.6093);
 	}
-
-
 }
