@@ -117,6 +117,7 @@ public class MainActivity extends Activity {
 
 	public void openMap(View view) {
 		if(this.race == null){
+			Toast.makeText(MainActivity.this, "Select your race first!", Toast.LENGTH_LONG).show();
 			System.out.println("___Choose race!__");
 		}else{
 			System.out.println("___Opening map!__");
