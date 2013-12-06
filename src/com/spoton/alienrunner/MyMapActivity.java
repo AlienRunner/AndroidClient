@@ -26,21 +26,16 @@ public class MyMapActivity extends FragmentActivity {
 	private LocationManager locMan;
 	private Marker userMarker;
 	private Marker emilMarker;
-	private User myUser;
-	private Context context;
-	private LocationManager manager;
-	ClientSender cs;
-	ArrayList<User> userList;
+	private Marker johanMarker;
+	private Marker perMarker;
+	private Marker jockeMarker;
+	private ClientSender cs;
+	private ArrayList<User> userList;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_my_map);
-		
-		locMan = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-		
-		context = this.getApplicationContext();
-        cs = new ClientSender(context);
 		
 		userIcon = R.drawable.arnold_point;
 		alienIcon = R.drawable.alien_point;
@@ -49,21 +44,86 @@ public class MyMapActivity extends FragmentActivity {
 		shopIcon = R.drawable.green_point;
 		otherIcon = R.drawable.purple_point;
 		
-		Intent i = getIntent();
-		String name = i.getStringExtra("name");
-		System.out.println("________NAME: " + name);
+		 Context context = this.getApplicationContext();
+	        cs = new ClientSender(context);
+	        
+	        Intent i = getIntent();
+            String name = i.getStringExtra("name");
+            System.out.println("________NAME: " + name);
+            String race = i.getStringExtra("race");
+            System.out.println("________Race: " + race);
+    		locMan = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+    		Location lastLoc = locMan.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+    		double lat = lastLoc.getLatitude();
+    		double lng = lastLoc.getLongitude();
+            User myUser = new User(name, lat, lng, race);
+            userList = cs.setAndFetch(myUser);
+            System.out.println("________USERLIST: " + userList);
+		
+		if(theMap==null){
+//		    //map not instantiated yet
+			FragmentManager fmanager = getSupportFragmentManager();
+			Fragment fragment = fmanager.findFragmentById(R.id.map);
+	        SupportMapFragment supportmapfragment = (SupportMapFragment)fragment;
+	        theMap = supportmapfragment.getMap();
+//            theMap.addMarker(new MarkerOptions()
+//            .position(new LatLng(32.1275701, 34.7983432))
+//            .title("Hello world"));
+			if(theMap != null){
+				theMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+				updatePlaces();
+			}
+		}
+	}
 
-		//TODO TAG BORT
-		userList = cs.setAndFetch(myUser);
-		System.out.println("________USERLIST: " + userList);
-		System.out.println("Creating MapHandler");
-		manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		MapHandler handler = new MapHandler(theMap, cs, myUser);
-		alienLocationListener listener = new alienLocationListener(handler);
-		manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, listener);
+	private void updatePlaces(){
+		//update location
+		locMan = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+		Location lastLoc = locMan.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		double lat = lastLoc.getLatitude();
+		double lng = lastLoc.getLongitude();
+		LatLng lastLatLng = new LatLng(lat, lng);
 		
+		// UserLocation
+		if(userMarker!=null) userMarker.remove();
+		userMarker = theMap.addMarker(new MarkerOptions()
+		    .position(lastLatLng)
+		    .title("You are here")
+		    .icon(BitmapDescriptorFactory.fromResource(userIcon))
+		    .snippet("Your last recorded location"));
+		theMap.animateCamera(CameraUpdateFactory.newLatLng(lastLatLng), 3000, null);
 		
+		// EmilLocation
+		if(emilMarker!=null) emilMarker.remove();
+		emilMarker = theMap.addMarker(new MarkerOptions()
+		    .position(new LatLng(55.715339,13.210391))
+		    .title("Emil is here")
+		    .icon(BitmapDescriptorFactory.fromResource(alienIcon))
+		    .snippet("Emils location"));
 		
+		// JohanLocation
+		if(johanMarker!=null) johanMarker.remove();
+		johanMarker = theMap.addMarker(new MarkerOptions()
+		    .position(new LatLng(55.712994,13.210584))
+		    .title("Johan is here")
+		    .icon(BitmapDescriptorFactory.fromResource(alienIcon))
+		    .snippet("Johans location"));
+		
+		// PerLocation
+		if(perMarker!=null) perMarker.remove();
+		perMarker = theMap.addMarker(new MarkerOptions()
+		    .position(new LatLng(55.715278,13.214339))
+		    .title("Per is here")
+		    .icon(BitmapDescriptorFactory.fromResource(alienIcon))
+		    .snippet("Pers location"));
+		
+		//JockeLocation
+		if(jockeMarker!=null) jockeMarker.remove();
+		jockeMarker = theMap.addMarker(new MarkerOptions()
+		    .position(new LatLng(55.713163,13.214897))
+		    .title("Jocke is here")
+		    .icon(BitmapDescriptorFactory.fromResource(alienIcon))
+		    .snippet("Jockes location"));
 	}
 	
 	@Override

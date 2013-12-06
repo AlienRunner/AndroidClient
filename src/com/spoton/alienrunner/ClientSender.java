@@ -12,6 +12,7 @@ import java.util.Iterator;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.view.Gravity;
 import android.widget.Toast;
 
 public class ClientSender extends AsyncTask<String, Void, String> implements
@@ -40,13 +41,23 @@ public class ClientSender extends AsyncTask<String, Void, String> implements
 	}
 
 	public ArrayList<User> setAndFetch(User myUser) {
+		ArrayList<User> userList = new ArrayList<User>();
 		String userString = "[" + myUser.getUserId() + "," + myUser.getxCoord()
 				+ "," + myUser.getyCoord() + "," + myUser.getRace() + "]";
 		String answer = sendMessage(userString);
 		System.out.println("__This was the answer:__" + answer);
-
-		return jsonToUser(answer);
-
+//        StringBuilder sb = new StringBuilder(answer);
+//        if(sb.substring(0, 0).equals("[")){
+		char c = answer.charAt(0);
+		if(c == '['){
+        	userList = jsonToUser(answer);        	
+        }else{
+			Toast customToast = new Toast(context);
+			customToast = Toast.makeText(context, answer, Toast.LENGTH_SHORT);
+			customToast.setGravity(Gravity.CENTER|Gravity.CENTER, 0, 0);
+			customToast.show();
+        }
+        return userList;
 	}
 
 	//
@@ -138,7 +149,6 @@ public class ClientSender extends AsyncTask<String, Void, String> implements
 		double dist = Double.MAX_VALUE;
 		double x1 = currUser.getxCoord();
 		double y1 = currUser.getyCoord();
-		User listUser = null;
 		while (iter.hasNext()) {
 			User tempUser = iter.next();
 			double x2 = tempUser.getxCoord();
@@ -146,7 +156,6 @@ public class ClientSender extends AsyncTask<String, Void, String> implements
 			double tempDist = getDistance(x1, y1, x2, y2);
 			if (tempDist < dist) {
 				dist = tempDist;
-				listUser = tempUser;
 			}
 		}
 		return dist;
