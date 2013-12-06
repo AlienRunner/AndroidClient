@@ -1,49 +1,65 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+  	xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent" 
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    >
+    android:layout_centerHorizontal="true"
+    android:background="@drawable/background">
 
-<!--     	<Button -->
-<!--         android:layout_width="wrap_content" -->
-<!--         android:layout_height="wrap_content" -->
-<!--         android:onClick="sendMessage" -->
-<!--         android:text="@string/button_send" /> -->
-
-<!--         <Button -->
-<!--             android:layout_width="match_parent" -->
-<!--             android:layout_height="wrap_content" -->
-<!--             android:onClick="openMap" -->
-<!--         	android:layout_marginTop="20dip" -->
-<!--         	android:layout_marginBottom="20dip" -->
-<!--             android:text="@string/button_map" /> -->
+    <LinearLayout
+        android:id="@+id/mainLayout"
+	    android:descendantFocusability="beforeDescendants"
+	    android:focusableInTouchMode="true" 
+        android:orientation="horizontal"
+        android:background="@drawable/background"
+        android:paddingLeft="65.0dip"
+        android:paddingTop="55.0dip"
+        android:paddingRight="65.0dip"
+        android:paddingBottom="1.0dip"
+        android:layout_width="fill_parent" android:layout_height="fill_parent">
         
+		<Button
+		    android:id="@+id/button_alien"
+		    android:focusableInTouchMode="true"
+			android:layout_weight="1.0"
+			android:layout_width="110dp"
+		    android:layout_height="110dp"
+		    android:background="@drawable/button_alien"
+		    android:onClick="selectRole"/>
+		
+		<Button
+		    android:id="@+id/button_human"
+		    android:focusableInTouchMode="true"
+			android:layout_weight="1.0"
+			android:layout_width="110dp"
+		    android:layout_height="110dp"
+		    android:background="@drawable/button_human"  
+	  		android:onClick="selectRole"/>
+    </LinearLayout>
+
         <TextView android:layout_width="fill_parent"
     		android:layout_height="wrap_content"
     		android:text="Name: "/>
 
 	    <EditText
 	        android:id="@+id/name"
-	        android:layout_width="212dp"
+	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_marginBottom="10dip" />
-        
-<!--         <TextView   -->
-<!-- 		    android:layout_width="fill_parent"  -->
-<!-- 		    android:layout_height="wrap_content"  -->
-<!-- 		    android:text="Password: "/> -->
-<!-- 	    <EditText android:id="@+id/email"  -->
-<!-- 	    		android:layout_width="fill_parent" -->
-<!-- 	    		android:layout_height="wrap_content"/> -->
+	        android:layout_centerHorizontal="true"
+	        android:hint="@string/hint"
+	        android:inputType="text"
+	        android:textColor="@color/Gray"
+	        android:layout_marginTop="275.0dip" />
 
 	    <Button
-	        android:id="@+id/btnNextScreen"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_marginBottom="20dip"
-	        android:layout_marginTop="15dip"
-	        android:onClick="openMap"
-	        android:text="Login" />
-
-</LinearLayout>
+			android:id="@+id/btnNextScreen"
+		    android:layout_width="200dp"
+   			android:layout_height="70dp"
+   			android:layout_marginTop="80dp"
+    		android:layout_below="@+id/name"
+    		android:layout_centerHorizontal="true"
+    		android:background="@drawable/start_running"
+	        android:onClick="openMap"/>
+</RelativeLayout>

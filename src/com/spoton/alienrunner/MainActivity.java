@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-
 import com.google.android.gms.maps.model.LatLng;
 
 import android.app.Activity;
@@ -59,6 +58,22 @@ public class MainActivity extends Activity{
 //			}
 //		});
 	}
+	
+	public void selectRole(View view){
+		System.out.println("___Selecting role!__");
+		findViewById(R.id.mainLayout).requestFocus();
+		Button b1 = (Button) findViewById(R.id.button_alien);
+		Button b2 = (Button) findViewById(R.id.button_human);
+//		R.id.button_human
+		Toast.makeText(getApplicationContext(), "b1.isselected lolno",   Toast.LENGTH_LONG).show();
+		if(b1.isSelected() == true ){
+			System.out.println("Alien button selected");
+			Toast.makeText(getApplicationContext(), "b1.isselected",   Toast.LENGTH_LONG).show();
+		}if(b2.isSelected() == true){
+			System.out.println("Human button selected");
+			Toast.makeText(getApplicationContext(), "b2.isselected",   Toast.LENGTH_LONG).show();
+		}
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -89,10 +104,8 @@ public class MainActivity extends Activity{
 	}
 	
 	public void openMap(View view){
+		System.out.println("___Opening map!__");
 		Intent mapScreen = new Intent(getApplicationContext(), MyMapActivity.class);
-		//mapScreen.putExtra("ClientSender", cs);
-		//mapScreen.putExtra("ClientSender", "testString");
-		//mapScreen.putExtra("ClientSender", new User("Hector", 10, 10));
 		mapScreen.putExtra("name", inputName.getText().toString());
 		startActivity(mapScreen);
 	}
