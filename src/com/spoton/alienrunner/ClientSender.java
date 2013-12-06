@@ -19,12 +19,14 @@ public class ClientSender extends AsyncTask<String, Void, String> implements Ser
     private Context context;
     private BufferedWriter out;
     private BufferedReader in;
+    private String leastDistance;
 //    private String answer;
 
 
     public ClientSender(Context context){
         this.context = context;
         socket = null;
+        leastDistance = "701";
     }
     
     public String sendMessage(String txt){
@@ -98,6 +100,13 @@ public class ClientSender extends AsyncTask<String, Void, String> implements Ser
                     Toast.LENGTH_LONG).show();
         }
 
+    }
+    public String getLeastDistance(){
+    	return leastDistance;
+    }
+    public void setLeastDistance(String Distance){
+    	leastDistance = Distance;
+    	
     }
     
 }

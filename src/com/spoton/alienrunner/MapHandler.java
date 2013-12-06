@@ -124,6 +124,8 @@ public class MapHandler {
 
 			// Make list update;
 			oponentList = updatedOponentList;
+			
+			
 
 		} else {
 			System.out.println("No List was sent to device");
