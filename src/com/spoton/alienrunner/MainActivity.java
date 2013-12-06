@@ -90,12 +90,9 @@ public class MainActivity extends Activity {
 
 	public void openMap(View view) {
 		if(this.race == null){
-//			Toast toast = new Toast(getApplicationContext());
-//			toast.makeText(MainActivity.this, "Select your race first!", Toast.LENGTH_LONG).show();
-//			toast.setGravity(Gravity.TOP|Gravity.LEFT, 0, 0);
-//			System.out.println("___Choose race!__");
+			System.out.println("___Choose race!__");
 			Toast customToast = new Toast(getApplicationContext());
-			customToast = Toast.makeText(getApplicationContext(), "Select your race first!", Toast.LENGTH_SHORT);
+			customToast = Toast.makeText(getApplicationContext(), "Select your (race)role first!", Toast.LENGTH_SHORT);
 			customToast.setGravity(Gravity.CENTER|Gravity.CENTER, 0, 0);
 			customToast.show();
 		}else{
