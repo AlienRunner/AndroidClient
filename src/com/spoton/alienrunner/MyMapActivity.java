@@ -29,7 +29,6 @@ public class MyMapActivity extends FragmentActivity {
 	private User myUser;
 	private Context context;
 	ClientSender cs;
-	DatabaseHandler dh;
 	ArrayList<User> userList;
 	
 	@Override
@@ -41,7 +40,6 @@ public class MyMapActivity extends FragmentActivity {
 		
 		context = this.getApplicationContext();
         cs = new ClientSender(context);
-        dh = new DatabaseHandler(cs);
 		
 		userIcon = R.drawable.arnold_point;
 		alienIcon = R.drawable.alien_point;
@@ -55,20 +53,21 @@ public class MyMapActivity extends FragmentActivity {
 		User myUser = new User("Johan", 99, 88);
 		userList = cs.setAndFetch(myUser);
 		System.out.println("________USERLIST: " + userList);
-//		if(theMap==null){
-////		    //map not instantiated yet
-//			FragmentManager fmanager = getSupportFragmentManager();
-//			Fragment fragment = fmanager.findFragmentById(R.id.map);
-//	        SupportMapFragment supportmapfragment = (SupportMapFragment)fragment;
-//	        theMap = supportmapfragment.getMap();
-////            theMap.addMarker(new MarkerOptions()
-////            .position(new LatLng(32.1275701, 34.7983432))
-////            .title("Hello world"));
-//			if(theMap != null){
-//				theMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-//				updatePlaces();
-//			}
-//		}
+		
+		if(theMap==null){
+//		    //map not instantiated yet
+			FragmentManager fmanager = getSupportFragmentManager();
+			Fragment fragment = fmanager.findFragmentById(R.id.map);
+	        SupportMapFragment supportmapfragment = (SupportMapFragment)fragment;
+	        theMap = supportmapfragment.getMap();
+//            theMap.addMarker(new MarkerOptions()
+//            .position(new LatLng(32.1275701, 34.7983432))
+//            .title("Hello world"));
+			if(theMap != null){
+				theMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+				updatePlaces();
+			}
+		}
 		
 		//TODO Databasehandler depricated??? Insert CLientSender to DatabaseHandler.
 		MapHandler handler = new MapHandler(theMap, locMan, cs, myUser);
