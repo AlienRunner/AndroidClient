@@ -9,13 +9,14 @@ public class User {//implements Serializable{
 	private double yCoord;
 	private String race;
 	
-	public User(String userId, double xCoord, double yCoord, String race){
+	public User(String userId, double xCoord, double yCoord, String race ){
 		this.userId = userId;
 		this.xCoord = xCoord;
 		this.yCoord = yCoord;
 		this.race = race;
+		
+		
 	}
-	
 	public String getUserId() {
 		return userId;
 	}
@@ -51,6 +52,7 @@ public class User {//implements Serializable{
 	public void setRace(String race){
 		this.race = race;
 	}
+	
 
 	public boolean equals(User b) {
 		if(b.getUserId().equals(userId)){
@@ -64,6 +66,5 @@ public class User {//implements Serializable{
 	    if (!(o instanceof User)) return false;
 	    return equals((User)o);
 	}
-	
 
 }
