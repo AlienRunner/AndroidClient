@@ -39,12 +39,17 @@ public class ClientSender extends AsyncTask<String, Void, String> implements Ser
     }
     
 	public ArrayList<User> setAndFetch(User myUser) {
-		String userString = "1" + "["+myUser.getUserId()+","+myUser.getxCoord()+","+myUser.getyCoord()+"]";
+		String userString = "2" + "["+myUser.getUserId()+","+myUser.getxCoord()+","+myUser.getyCoord()+"]";
 		String answer = sendMessage(userString);
 		System.out.println("__This was the answer:__" + answer);
 //		return null;
 
 		return jsonToUser(answer);
+		
+	}
+	public void insertUser(User myUser,String race ){
+		String userString = "1" + "["+myUser.getUserId()+","+myUser.getxCoord()+","+myUser.getyCoord()+race+"]";
+		sendMessage(userString);
 		
 	}
 	
