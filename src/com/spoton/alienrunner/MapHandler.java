@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 
@@ -21,49 +20,43 @@ public class MapHandler {
 
 	private Marker myMarker;
 	private GoogleMap map;
+	private LocationManager locMan;
+	private alienLocationListener locationListener;
 	private Location currentLocation;
 	private ClientSender cs;
 	private User myUser;
 	private ArrayList<User> oponentList;
 	private HashMap<User, Marker> markersList;
-	private Context context;
 
-	MapHandler(GoogleMap theMap, ClientSender clientSender, User myuser, Context cntxt) {
-		this.context = cntxt;
+	MapHandler(GoogleMap theMap, LocationManager locManager,
+			ClientSender clientSender, User myuser) {
+
 		this.map = theMap;
+		this.locMan = locManager;
 		this.cs = clientSender;
 		this.myUser = myuser;
-		System.out.println("Trying to intiatate a listner");
+		locationListener = new alienLocationListener(this);
 		markersList = new HashMap<User, Marker>(); 
 		// Activates an listener that runs each time a new gps location is
 		// provided
-		System.out.println("LocationListener Initaiated");
-		GPSTracker tracker = new GPSTracker(context, this);
-		gpsUpdate(tracker.getLocation());
-		
+		locMan.requestLocationUpdates(locMan.GPS_PROVIDER, 0, 0,
+				locationListener);
 	}
 
-	// Is run by the listener each time a gps update is made.
+	// Is run by the listener eachtime a gps update is made.
 	public void gpsUpdate(Location location) {
 		System.out.println("Latitude: " + location.getLatitude());
 		System.out.println("Longitude " + location.getLongitude());
 		// Fetch gps cordinates updating myUser object
 		myUser.setxCoord(location.getLatitude());
 		myUser.setyCoord(location.getLongitude());
-		
-		
-		System.out.println("OBJECT_myUser:" +myUser);
-		System.out.println("OBJECT_map:" +map);
-		System.out.println("OBJECT_cs:" +cs);
-		
+
 		// If myMarker exist remove from map and Update the map with his new
 		// myMarker containing his new position;
 		if (myMarker != null) {
-			System.out.println("ENTERING myMarker !=Null");
 			myMarker.setPosition(new LatLng(location.getLatitude(), location
 					.getLongitude()));
 		} else {
-			System.out.println("ENTERING myMarker ELSE");
 			myMarker = map.addMarker(new MarkerOptions()
 			.position(
 					new LatLng(location.getLatitude(), location
@@ -72,10 +65,9 @@ public class MapHandler {
 							.snippet("Your last recorded location"));
 		}
 		// Make camera focus on my new position
-		System.out.println("Animating CAMERA");
 		map.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(location
 				.getLatitude(), location.getLongitude())), 3000, null);
-		System.out.println("DOING UPDATE PLAYERS");
+
 		updatePlayers();
 	}
 
