@@ -47,8 +47,8 @@ public class ClientSender extends AsyncTask<String, Void, String> implements Ser
                 return jsonToUser(answer);
                 
         }
-        public void insertUser(User myUser,String race ){
-                String userString = "1" + "["+myUser.getUserId()+","+myUser.getxCoord()+","+myUser.getyCoord()+race+"]";
+        public void insertUser(String userName,String race ){
+                String userString = "1" + "["+userName+","+"0.0"+","+"0.0"+","+race+"]";
                 sendMessage(userString);
                 
         }
