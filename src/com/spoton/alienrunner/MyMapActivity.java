@@ -12,7 +12,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import android.location.Location;
 import android.location.LocationManager;
 import android.content.Context;
@@ -48,9 +47,9 @@ public class MyMapActivity extends FragmentActivity {
 		String name = i.getStringExtra("name");
 		//TABORT
 		name = "Johan";
-		System.out.println("________NAME: " + name);
-		User myUser = new User(name, 99, 88);
-		
+		System.out.println("________NAME: " + name);	
+		User myUser = new User("Johan", 99, 88, "Alien");
+
 		userList = cs.setAndFetch(myUser);
 		System.out.println("________USERLIST: " + userList);
 		if(theMap==null){
