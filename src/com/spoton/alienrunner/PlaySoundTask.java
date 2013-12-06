@@ -15,7 +15,7 @@ public class PlaySoundTask extends AsyncTask<ClientSender, Void, Boolean>{
 		String distance = cs.getLeastDistance();
 		int timeToSleep = timeToSleep(distance);
 		try {
-			this.wait((long) timeToSleep);
+			Thread.sleep(timeToSleep);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -37,13 +37,7 @@ public class PlaySoundTask extends AsyncTask<ClientSender, Void, Boolean>{
 			e.printStackTrace();
 		}
 		mp.start();
-		while(mp.isPlaying()){
-			
-		}
-		
-		
-		
-		return null;
+		return true;
 	}
 	
 	//Return a value in seconds

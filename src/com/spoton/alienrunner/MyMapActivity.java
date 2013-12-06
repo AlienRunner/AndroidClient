@@ -28,6 +28,7 @@ public class MyMapActivity extends FragmentActivity {
 	private Marker emilMarker;
 	private User myUser;
 	private Context context;
+	private LocationManager manager;
 	ClientSender cs;
 	ArrayList<User> userList;
 	
@@ -53,42 +54,14 @@ public class MyMapActivity extends FragmentActivity {
 		User myUser = new User("Johan", 99, 88, "Alien");
 		userList = cs.setAndFetch(myUser);
 		System.out.println("________USERLIST: " + userList);
-		
-//		if(theMap==null){
-////		    //map not instantiated yet
-//			FragmentManager fmanager = getSupportFragmentManager();
-//			Fragment fragment = fmanager.findFragmentById(R.id.map);
-//	        SupportMapFragment supportmapfragment = (SupportMapFragment)fragment;
-//	        theMap = supportmapfragment.getMap();
-////            theMap.addMarker(new MarkerOptions()
-////            .position(new LatLng(32.1275701, 34.7983432))
-////            .title("Hello world"));
-//			if(theMap != null){
-//				theMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-//				updatePlaces();
-//			}
-//		}
+		System.out.println("Creating MapHandler");
+		manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		MapHandler handler = new MapHandler(theMap, cs, myUser);
+		alienLocationListener listener = new alienLocationListener(handler);
+		manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, listener);
 		
 		
-		//TODO Databasehandler depricated??? Insert CLientSender to DatabaseHandler.
-		MapHandler handler = new MapHandler(theMap, locMan, cs, myUser);
-//		handler.gpsUpdate();
-	}
-
-	private void updatePlaces(){
-		//update location
 		
-
-		
-		// EmilLocation
-		if(emilMarker!=null) emilMarker.remove();
-		emilMarker = theMap.addMarker(new MarkerOptions()
-		    .position(new LatLng(55.715339,13.210391))
-		    .title("Emil is here")
-		    .icon(BitmapDescriptorFactory.fromResource(alienIcon))
-		    .snippet("Emils location"));
-		
-	
 	}
 	
 	@Override

@@ -11,7 +11,8 @@ public class alienLocationListener implements android.location.LocationListener{
 	}
 	@Override
 	public void onLocationChanged(Location location) {
-			handler.gpsUpdate(location);
+		System.out.println("alienLocationlisterner Activated");	
+		handler.gpsUpdate(location);
 	}
 	@Override
 	public void onProviderDisabled(String provider) {
