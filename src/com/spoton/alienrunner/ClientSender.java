@@ -41,7 +41,7 @@ public class ClientSender extends AsyncTask<String, Void, String> implements Ser
 	public ArrayList<User> setAndFetch(User myUser) {
 		String userString =  "["+myUser.getUserId()+","+myUser.getxCoord()+","+myUser.getyCoord()+"]";
 		String answer = sendMessage(userString);
-		System.out.println("__This was the answe:__" + answer);
+		System.out.println("__This was the answer:__" + answer);
 //		return null;
 
 		return jsonToUser(answer);

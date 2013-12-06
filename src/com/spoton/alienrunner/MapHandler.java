@@ -23,17 +23,17 @@ public class MapHandler {
 	private LocationManager locMan;
 	private alienLocationListener locationListener;
 	private Location currentLocation;
-	private DatabaseHandler dbHandler;
+	private ClientSender cs;
 	private User myUser;
 	private ArrayList<User> oponentList;
 	private HashMap<User, Marker> markersList;
 
 	MapHandler(GoogleMap theMap, LocationManager locManager,
-			DatabaseHandler databaseHandler, User myuser) {
+			ClientSender clientSender, User myuser) {
 
 		this.map = theMap;
 		this.locMan = locManager;
-		this.dbHandler = databaseHandler;
+		this.cs = clientSender;
 		this.myUser = myuser;
 		locationListener = new alienLocationListener(this);
 		markersList = new HashMap<User, Marker>(); 
@@ -75,7 +75,7 @@ public class MapHandler {
 	public void updatePlayers() {
 
 		// Collects all players from database at server.
-		ArrayList<User> updatedOponentList = dbHandler.setAndFetch(myUser);
+		ArrayList<User> updatedOponentList = cs.setAndFetch(myUser);
 		if (updatedOponentList != null) {
 
 			// 1. Remove players from map and from hashmap.

@@ -23,41 +23,41 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class MainActivity extends Activity{
-    private Context context;
+//    private Context context;
 	EditText inputName;
-	EditText inputEmail;
+//	EditText inputEmail;
 //	private LocationManager locMan;
-	ClientSender cs;
-	DatabaseHandler dh;
+//	ClientSender cs;
+//	DatabaseHandler dh;
 	
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-        context = this.getApplicationContext();
-        cs = new ClientSender(context);
-        dh = new DatabaseHandler(cs);
-		inputName = (EditText) findViewById(R.id.name);
-		inputEmail = (EditText) findViewById(R.id.email);
-		Button btnNextScreen = (Button) findViewById(R.id.btnNextScreen);
+//        context = this.getApplicationContext();
+//        cs = new ClientSender(context);
+//        dh = new DatabaseHandler(cs);
+		this.inputName = (EditText) findViewById(R.id.name);
+//		inputEmail = (EditText) findViewById(R.id.email);
+//		Button btnNextScreen = (Button) findViewById(R.id.btnNextScreen);
 		
 		
 		//Listening to button event
-		btnNextScreen.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View arg0) {
-				//Starting a new Intent
-				Intent nextScreen = new Intent(getApplicationContext(), MyMailActivity.class);
-				
-				//Sending data to another Activity
-				nextScreen.putExtra("name", inputName.getText().toString());
-				nextScreen.putExtra("email", inputEmail.getText().toString());
-				
-				// starting new activity
-				startActivity(nextScreen);
-				
-			}
-		});
+//		btnNextScreen.setOnClickListener(new View.OnClickListener() {
+//			public void onClick(View arg0) {
+//				//Starting a new Intent
+//				Intent nextScreen = new Intent(getApplicationContext(), MyMailActivity.class);
+//				
+//				//Sending data to another Activity
+//				nextScreen.putExtra("name", inputName.getText().toString());
+////				nextScreen.putExtra("email", inputEmail.getText().toString());
+//				
+//				// starting new activity
+//				startActivity(nextScreen);
+//				
+//			}
+//		});
 	}
 
 	@Override
@@ -84,8 +84,8 @@ public class MainActivity extends Activity{
 		// clientSender.execute(message);
 //		cs.sendMessage("THIS IS message_______");
 //		Toast.makeText(MainActivity.this, "hi", Toast.LENGTH_LONG).show();
-		User myUser = new User("Johan", 55, 44);
-		cs.setAndFetch(myUser);
+//		User myUser = new User("Johan", 55, 44);
+//		cs.setAndFetch(myUser);
 	}
 	
 	public void openMap(View view){
@@ -93,6 +93,7 @@ public class MainActivity extends Activity{
 		//mapScreen.putExtra("ClientSender", cs);
 		//mapScreen.putExtra("ClientSender", "testString");
 		//mapScreen.putExtra("ClientSender", new User("Hector", 10, 10));
+		mapScreen.putExtra("name", inputName.getText().toString());
 		startActivity(mapScreen);
 	}
 

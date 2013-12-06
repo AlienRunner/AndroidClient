@@ -6,5 +6,6 @@
     <string name="button_send">Send Coordinates</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    
 
 </resources>

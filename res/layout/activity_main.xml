@@ -4,56 +4,46 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     >
-    
-<!--     <EditText -->
-<!--         android:id="@+id/edit_message" -->
+
+<!--     	<Button -->
 <!--         android:layout_width="wrap_content" -->
 <!--         android:layout_height="wrap_content" -->
-<!--         android:hint="@string/edit_message" /> -->
-    
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="sendMessage"
-        android:text="@string/button_send" />
+<!--         android:onClick="sendMessage" -->
+<!--         android:text="@string/button_send" /> -->
 
-<!--     <LinearLayout -->
-            
-<!-- 	    android:layout_width="match_parent" -->
-<!-- 	    android:layout_height="match_parent" -->
-<!-- 	    android:orientation="vertical" > -->
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="openMap"
-        	android:layout_marginTop="20dip"
-        	android:layout_marginBottom="20dip"
-            android:text="@string/button_map" />
+<!--         <Button -->
+<!--             android:layout_width="match_parent" -->
+<!--             android:layout_height="wrap_content" -->
+<!--             android:onClick="openMap" -->
+<!--         	android:layout_marginTop="20dip" -->
+<!--         	android:layout_marginBottom="20dip" -->
+<!--             android:text="@string/button_map" /> -->
         
         <TextView android:layout_width="fill_parent"
     		android:layout_height="wrap_content"
     		android:text="Name: "/>
-	    <EditText android:id="@+id/name" 
-    		android:layout_width="fill_parent"
-    		android:layout_height="wrap_content"
-    		android:layout_marginBottom="10dip"/>  
-        
-        <TextView  
-		    android:layout_width="fill_parent" 
-		    android:layout_height="wrap_content" 
-		    android:text="Password: "/>
-	    <EditText android:id="@+id/email" 
-	    		android:layout_width="fill_parent"
-	    		android:layout_height="wrap_content"/>
-	    
-	    <Button android:id="@+id/btnNextScreen"
-	     		android:layout_width="wrap_content"
-	    		android:layout_height="wrap_content"
-	    		android:text="Login"
-	    		android:layout_marginTop="15dip"
-	    		android:layout_marginBottom="20dip"/>
 
-<!--     </LinearLayout> -->
+	    <EditText
+	        android:id="@+id/name"
+	        android:layout_width="212dp"
+	        android:layout_height="wrap_content"
+	        android:layout_marginBottom="10dip" />
+        
+<!--         <TextView   -->
+<!-- 		    android:layout_width="fill_parent"  -->
+<!-- 		    android:layout_height="wrap_content"  -->
+<!-- 		    android:text="Password: "/> -->
+<!-- 	    <EditText android:id="@+id/email"  -->
+<!-- 	    		android:layout_width="fill_parent" -->
+<!-- 	    		android:layout_height="wrap_content"/> -->
+
+	    <Button
+	        android:id="@+id/btnNextScreen"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginBottom="20dip"
+	        android:layout_marginTop="15dip"
+	        android:onClick="openMap"
+	        android:text="Login" />
 
 </LinearLayout>
