@@ -47,9 +47,15 @@ public class MapHandler {
         alienUserIcon = R.drawable.broodmother_point;
 		marinesUserIcon = R.drawable.arnold_point;
 		
+<<<<<<< HEAD
 		System.out.println("___THIS IS THE MAPHANDLER CONSTRUCOT AND THE CURR RACE:____" + myUser.getRace());
 		if (myUser.getRace() == "Alien") {
 			System.out.println("___Now ALIEN:____" + myUser.getRace());
+=======
+		System.out.println("___THIS IS THE MAPHANDLER CONSTRUCOT AND THE CURR RACE:____" + myuser.getRace());
+		if (myuser.getRace().equals("Alien")) {
+			System.out.println("___Now ALIEN:____" + myuser.getRace());
+>>>>>>> branch 'master' of https://github.com/AlienRunner/AndroidClient.git
 			this.userIcon = alienUserIcon;
 		}else{
 			System.out.println("___Now ARNOLD:____" + myUser.getRace());
@@ -101,11 +107,11 @@ public class MapHandler {
 					.position(new LatLng(location.getLatitude(), location.getLongitude()))
 					.title("You are here")
 					.snippet("Your last recorded location")
-					.icon(BitmapDescriptorFactory.fromResource(userIcon))
+					.icon(BitmapDescriptorFactory.fromResource(this.userIcon))
 					);
 		}
 		System.out.println("___THIS IS THE CURR RACE:____" + myUser.getRace());
-		if (myUser.getRace() == "Alien") {
+		if (myUser.getRace().equals( "Alien")) {
 			myMarker.setIcon(BitmapDescriptorFactory.fromResource( alienUserIcon));
 		}else{
 			myMarker.setIcon(BitmapDescriptorFactory.fromResource(marinesUserIcon));
@@ -221,7 +227,7 @@ public class MapHandler {
 	
 	private int checkIconType(User user){
 		int icon;
-		if (user.getRace() == "Alien")
+		if (user.getRace().equals("Alien"))
 		{
 			icon = alienIcon;
 		}else{
