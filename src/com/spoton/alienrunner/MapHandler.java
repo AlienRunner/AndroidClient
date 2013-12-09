@@ -46,16 +46,9 @@ public class MapHandler {
         alienIcon = R.drawable.alien_point;
         alienUserIcon = R.drawable.broodmother_point;
 		marinesUserIcon = R.drawable.arnold_point;
-		
-<<<<<<< HEAD
 		System.out.println("___THIS IS THE MAPHANDLER CONSTRUCOT AND THE CURR RACE:____" + myUser.getRace());
 		if (myUser.getRace() == "Alien") {
 			System.out.println("___Now ALIEN:____" + myUser.getRace());
-=======
-		System.out.println("___THIS IS THE MAPHANDLER CONSTRUCOT AND THE CURR RACE:____" + myuser.getRace());
-		if (myuser.getRace().equals("Alien")) {
-			System.out.println("___Now ALIEN:____" + myuser.getRace());
->>>>>>> branch 'master' of https://github.com/AlienRunner/AndroidClient.git
 			this.userIcon = alienUserIcon;
 		}else{
 			System.out.println("___Now ARNOLD:____" + myUser.getRace());
