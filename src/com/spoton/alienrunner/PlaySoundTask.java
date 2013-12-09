@@ -5,26 +5,19 @@ import java.io.IOException;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.support.v4.content.AsyncTaskLoader;
+import android.util.Log;
 
-public class PlaySoundTask extends AsyncTask<MapHandler, Void, Boolean>{
-	private User myUser;
+public class PlaySoundTask extends AsyncTask<Void, Void, Boolean>{
 	private MapHandler mapHandler;
 	
-	public PlaySoundTask(User myUser){
-		this.myUser = myUser;
-	}
-
 	@Override
-	protected Boolean doInBackground(MapHandler... params) {
-		mapHandler = params[0];
-		double leastdistance = mapHandler.getLeastDistance();
-		double timeToSleep = timeToSleep(leastdistance);
-		try {
-			Thread.sleep((long) timeToSleep);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	protected Boolean doInBackground(Void... params) {
+		//mapHandler = params[0];
+		//double leastdistance = mapHandler.getLeastDistance();
+		//double timeToSleep = timeToSleep(leastdistance);
+		Log.d("INITIERAR", "SKAPAR TASK");
+		
+		android.os.SystemClock.sleep(3000);
 		MediaPlayer mp = new MediaPlayer();
 		try {
 			mp.setDataSource("R.raw.tracker_active.wav");
@@ -44,6 +37,14 @@ public class PlaySoundTask extends AsyncTask<MapHandler, Void, Boolean>{
 		mp.start();
 		return true;
 	}
+	
+	
+	  protected void onPostExecute() {
+//	  new PlaySoundTask().execute(mapHandler);	 
+		  new PlaySoundTask().execute();	 
+		  
+	  }
+	
 	
 	//Return a value in seconds
 	private double timeToSleep(double distance){
