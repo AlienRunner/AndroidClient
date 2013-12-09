@@ -19,7 +19,7 @@ public class ClientSender extends AsyncTask<String, Void, String> implements
 		Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private Socket socket;
+	Socket socket;
 	public static String SERVER_IP = "213.67.75.254";
 	private Context context;
 	private BufferedWriter out;
@@ -46,18 +46,18 @@ public class ClientSender extends AsyncTask<String, Void, String> implements
 				+ "," + myUser.getyCoord() + "," + myUser.getRace() + "]";
 		String answer = sendMessage(userString);
 		System.out.println("__This was the answer:__" + answer);
-//        StringBuilder sb = new StringBuilder(answer);
-//        if(sb.substring(0, 0).equals("[")){
+		// StringBuilder sb = new StringBuilder(answer);
+		// if(sb.substring(0, 0).equals("[")){
 		char c = answer.charAt(0);
-		if(c == '['){
-        	userList = jsonToUser(answer);        	
-        }else{
+		if (c == '[') {
+			userList = jsonToUser(answer);
+		} else {
 			Toast customToast = new Toast(context);
 			customToast = Toast.makeText(context, answer, Toast.LENGTH_SHORT);
-			customToast.setGravity(Gravity.CENTER|Gravity.CENTER, 0, 0);
+			customToast.setGravity(Gravity.CENTER | Gravity.CENTER, 0, 0);
 			customToast.show();
-        }
-        return userList;
+		}
+		return userList;
 	}
 
 	//
@@ -95,8 +95,10 @@ public class ClientSender extends AsyncTask<String, Void, String> implements
 			if (socket == null) {
 				socket = new Socket(SERVER_IP, 21101);
 			}
-			out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			out = new BufferedWriter(new OutputStreamWriter(
+					socket.getOutputStream()));
+			in = new BufferedReader(new InputStreamReader(
+					socket.getInputStream()));
 			out.write(params[0]);
 			out.flush();
 
@@ -114,15 +116,14 @@ public class ClientSender extends AsyncTask<String, Void, String> implements
 	protected void onPostExecute(String response) {
 		if (response != null) {
 			System.out.println("ONPOSTEXCECUTE" + response);
-			Toast.makeText(context, "Connected to server!",
-					Toast.LENGTH_LONG).show();
+			Toast.makeText(context, "Connected to server!", Toast.LENGTH_LONG)
+					.show();
 
 		} else {
 			System.out.println("ONPOSTEXCECUTEERROR" + response);
 			Toast.makeText(context, "Can't connect to server!",
 					Toast.LENGTH_LONG).show();
 		}
-
 	}
 
 	public User getClosestUser(User currUser, ArrayList<User> userList) {
@@ -167,6 +168,6 @@ public class ClientSender extends AsyncTask<String, Void, String> implements
 				* Math.cos(Math.toRadians(x2))
 				* Math.cos(Math.toRadians(y1 - y2)));
 		return (Math.toDegrees(Math.acos(theDistance)) * 69.09 * 1.6093);
-//		return (Math.toDegrees(Math.acos(theDistance)) * 69.09 * 1.6093);
+		// return (Math.toDegrees(Math.acos(theDistance)) * 69.09 * 1.6093);
 	}
 }

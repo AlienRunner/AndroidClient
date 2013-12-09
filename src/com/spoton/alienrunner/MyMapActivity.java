@@ -3,6 +3,7 @@ package com.spoton.alienrunner;
 import java.util.ArrayList;
 
 import android.os.Bundle;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -11,126 +12,143 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.view.Gravity;
 import android.view.Menu;
+import android.widget.Toast;
 
-public class MyMapActivity extends FragmentActivity {
+public class MyMapActivity extends FragmentActivity implements LocationListener{
 	private int userIcon, alienIcon, foodIcon, drinkIcon, shopIcon, otherIcon;
 	private GoogleMap theMap;
+	private String providerString;
 	private LocationManager locMan;
 	private Marker userMarker;
 	private Marker emilMarker;
-	private Marker johanMarker;
-	private Marker perMarker;
-	private Marker jockeMarker;
+	private User myUser;
+	private MapHandler mapHandler;
 	private ClientSender cs;
-	private ArrayList<User> userList;
-	
+	private Context context;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState);		
+		Intent i = getIntent();
+        String name = i.getStringExtra("name");
+        System.out.println("________NAME: " + name);
+        String race = i.getStringExtra("race");
+        System.out.println("________Race: " + race);
+		locMan = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+		Location lastLoc = locMan.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		double lat = lastLoc.getLatitude();
+		double lng = lastLoc.getLongitude();
+        User myUser = new User(name, lat, lng, race);
 		setContentView(R.layout.activity_my_map);
-		
+		context = this.getApplicationContext();
 		userIcon = R.drawable.arnold_point;
 		alienIcon = R.drawable.alien_point;
 		foodIcon = R.drawable.red_point;
 		drinkIcon = R.drawable.blue_point;
 		shopIcon = R.drawable.green_point;
 		otherIcon = R.drawable.purple_point;
-		
-		 Context context = this.getApplicationContext();
-	        cs = new ClientSender(context);
-	        
-	        Intent i = getIntent();
-            String name = i.getStringExtra("name");
-            System.out.println("________NAME: " + name);
-            String race = i.getStringExtra("race");
-            System.out.println("________Race: " + race);
-    		locMan = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-    		Location lastLoc = locMan.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-    		double lat = lastLoc.getLatitude();
-    		double lng = lastLoc.getLongitude();
-            User myUser = new User(name, lat, lng, race);
-            userList = cs.setAndFetch(myUser);
-            System.out.println("________USERLIST: " + userList);
-		
-		if(theMap==null){
-//		    //map not instantiated yet
+		if (theMap == null) {
+			// //map not instantiated yet
+
 			FragmentManager fmanager = getSupportFragmentManager();
 			Fragment fragment = fmanager.findFragmentById(R.id.map);
-	        SupportMapFragment supportmapfragment = (SupportMapFragment)fragment;
-	        theMap = supportmapfragment.getMap();
-//            theMap.addMarker(new MarkerOptions()
-//            .position(new LatLng(32.1275701, 34.7983432))
-//            .title("Hello world"));
-			if(theMap != null){
-				theMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-				updatePlaces();
-			}
+			SupportMapFragment supportmapfragment = (SupportMapFragment) fragment;
+			theMap = supportmapfragment.getMap();
 		}
+		if (theMap != null) {
+			System.out.println("MAPP ÄR OMTE MULL");
+			theMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+
+		}
+		
+		// Define the criteria how to select the locatioin provider -> use
+		// default
+		
+		
+
+		//CREATE HANDLER
+		System.out.println("VARFÖR KÖR DU DETTA?");
+		cs = new ClientSender(context);
+		mapHandler = new MapHandler(theMap, cs, myUser);
+	//	mapHandler.gpsUpdate(location);
+		System.out.println("Doing update Players");
+		mapHandler.gpsUpdate(lastLoc);
+		
+
+	}
+	@Override
+	protected void onResume() {
+		super.onResume();
+		System.out.println("FLIPPED THAT S");
+		locMan.requestLocationUpdates(locMan.GPS_PROVIDER, 400, 1, this);
+	}
+	@Override
+	protected void onPause() {
+		super.onPause();
+		locMan.removeUpdates(this);
 	}
 
-	private void updatePlaces(){
-		//update location
-		locMan = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-		Location lastLoc = locMan.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		double lat = lastLoc.getLatitude();
-		double lng = lastLoc.getLongitude();
-		LatLng lastLatLng = new LatLng(lat, lng);
-		
-		// UserLocation
-		if(userMarker!=null) userMarker.remove();
-		userMarker = theMap.addMarker(new MarkerOptions()
-		    .position(lastLatLng)
-		    .title("You are here")
-		    .icon(BitmapDescriptorFactory.fromResource(userIcon))
-		    .snippet("Your last recorded location"));
-		theMap.animateCamera(CameraUpdateFactory.newLatLng(lastLatLng), 3000, null);
-		
-		// EmilLocation
-		if(emilMarker!=null) emilMarker.remove();
-		emilMarker = theMap.addMarker(new MarkerOptions()
-		    .position(new LatLng(55.715339,13.210391))
-		    .title("Emil is here")
-		    .icon(BitmapDescriptorFactory.fromResource(alienIcon))
-		    .snippet("Emils location"));
-		
-		// JohanLocation
-		if(johanMarker!=null) johanMarker.remove();
-		johanMarker = theMap.addMarker(new MarkerOptions()
-		    .position(new LatLng(55.712994,13.210584))
-		    .title("Johan is here")
-		    .icon(BitmapDescriptorFactory.fromResource(alienIcon))
-		    .snippet("Johans location"));
-		
-		// PerLocation
-		if(perMarker!=null) perMarker.remove();
-		perMarker = theMap.addMarker(new MarkerOptions()
-		    .position(new LatLng(55.715278,13.214339))
-		    .title("Per is here")
-		    .icon(BitmapDescriptorFactory.fromResource(alienIcon))
-		    .snippet("Pers location"));
-		
-		//JockeLocation
-		if(jockeMarker!=null) jockeMarker.remove();
-		jockeMarker = theMap.addMarker(new MarkerOptions()
-		    .position(new LatLng(55.713163,13.214897))
-		    .title("Jocke is here")
-		    .icon(BitmapDescriptorFactory.fromResource(alienIcon))
-		    .snippet("Jockes location"));
-	}
-	
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+	public void onLocationChanged(Location location) {
+		int lat = (int) (location.getLatitude());
+		int lng = (int) (location.getLongitude());
+		System.out.println("LOCATION CHANGED, LONG:" + location.getLongitude() +" LAT: " +location.getLatitude());
+		
+		Toast customToast = new Toast(getApplicationContext());
+		customToast = Toast.makeText(getApplicationContext(), String.valueOf(location.getLongitude()), Toast.LENGTH_SHORT);
+		customToast.setGravity(Gravity.CENTER|Gravity.CENTER, 0, 0);
+		customToast.show();
+		mapHandler.gpsUpdate(location);
+		
+		
+		
 	}
+
+
+
+	//		GPSTracker tracker = new GPSTracker(MyMapActivity.this);
+	//	Location myLocation = tracker.getLocation();
+	//		 Context context = this.getApplicationContext();
+	//		 ClientSender cs = new ClientSender(context);
+	//		 MapHandler handler = new MapHandler(theMap, cs, myUser);
+	//		 handler.gpsUpdate(locMan.getLastKnownLocation(locMan.GPS_PROVIDER));
+	//		 locMan = (LocationManager) this.getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+	//		 alienLocationListener listener = new alienLocationListener(handler);
+	//		 locMan.requestLocationUpdates(locMan.NETWORK_PROVIDER, 1000, 0, listener);
+
+
+
+
+@Override
+public void onStatusChanged(String provider, int status, Bundle extras) {
+  // TODO Auto-generated method stub
 
 }
+
+@Override
+public void onProviderEnabled(String provider) {
+  Toast.makeText(this, "Enabled new provider " + provider,
+      Toast.LENGTH_SHORT).show();
+
+}
+
+@Override
+public void onProviderDisabled(String provider) {
+  Toast.makeText(this, "Disabled provider " + provider,
+      Toast.LENGTH_SHORT).show();
+}
+} 
+
+
