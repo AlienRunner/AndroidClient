@@ -26,74 +26,55 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.widget.Toast;
 
-public class MyMapActivity extends FragmentActivity implements LocationListener{
-	private int userIcon, alienIcon, foodIcon, drinkIcon, shopIcon, otherIcon;
+public class MyMapActivity extends FragmentActivity implements LocationListener {
 	private GoogleMap theMap;
-	private String providerString;
 	private LocationManager locMan;
-	private Marker userMarker;
-	private Marker emilMarker;
-	private User myUser;
 	private MapHandler mapHandler;
 	private ClientSender cs;
 	private Context context;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);		
-		Intent i = getIntent();
-        String name = i.getStringExtra("name");
-        System.out.println("________NAME: " + name);
-        String race = i.getStringExtra("race");
-        System.out.println("________Race: " + race);
-		locMan = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-		Location lastLoc = locMan.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		double lat = lastLoc.getLatitude();
-		double lng = lastLoc.getLongitude();
-        User myUser = new User(name, lat, lng, race);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_my_map);
 		context = this.getApplicationContext();
-		userIcon = R.drawable.arnold_point;
-		alienIcon = R.drawable.alien_point;
-		foodIcon = R.drawable.red_point;
-		drinkIcon = R.drawable.blue_point;
-		shopIcon = R.drawable.green_point;
-		otherIcon = R.drawable.purple_point;
-		if (theMap == null) {
-			// //map not instantiated yet
 
+		Intent i = getIntent();
+		String name = i.getStringExtra("name");
+		System.out.println("________NAME: " + name);
+		String race = i.getStringExtra("race");
+		System.out.println("________Race: " + race);
+		locMan = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		Location lastLoc = locMan
+				.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		double lat = lastLoc.getLatitude();
+		double lng = lastLoc.getLongitude();
+		User myUser = new User(name, lat, lng, race);
+
+		if (theMap == null) {
 			FragmentManager fmanager = getSupportFragmentManager();
 			Fragment fragment = fmanager.findFragmentById(R.id.map);
 			SupportMapFragment supportmapfragment = (SupportMapFragment) fragment;
 			theMap = supportmapfragment.getMap();
-		}
-		if (theMap != null) {
-			System.out.println("MAPP ÄR OMTE MULL");
+		}else{
+			System.out.println("KARTAN €R LADDAD!");
 			theMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-
 		}
 		
-		// Define the criteria how to select the locatioin provider -> use
-		// default
-		
-		
-
-		//CREATE HANDLER
-		System.out.println("VARFÖR KÖR DU DETTA?");
 		cs = new ClientSender(context);
 		mapHandler = new MapHandler(theMap, cs, myUser);
-	//	mapHandler.gpsUpdate(location);
 		System.out.println("Doing update Players");
 		mapHandler.gpsUpdate(lastLoc);
-		
-
 	}
+
 	@Override
 	protected void onResume() {
 		super.onResume();
 		System.out.println("FLIPPED THAT S");
 		locMan.requestLocationUpdates(locMan.GPS_PROVIDER, 400, 1, this);
 	}
+
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -102,53 +83,33 @@ public class MyMapActivity extends FragmentActivity implements LocationListener{
 
 	@Override
 	public void onLocationChanged(Location location) {
-		int lat = (int) (location.getLatitude());
-		int lng = (int) (location.getLongitude());
-		System.out.println("LOCATION CHANGED, LONG:" + location.getLongitude() +" LAT: " +location.getLatitude());
-		
+		System.out.println("LOCATION CHANGED, LONG:" + location.getLongitude()
+				+ " LAT: " + location.getLatitude());
+
 		Toast customToast = new Toast(getApplicationContext());
-		customToast = Toast.makeText(getApplicationContext(), String.valueOf(location.getLongitude()), Toast.LENGTH_SHORT);
-		customToast.setGravity(Gravity.CENTER|Gravity.CENTER, 0, 0);
+		customToast = Toast.makeText(getApplicationContext(),
+				String.valueOf(location.getLongitude()), Toast.LENGTH_SHORT);
+		customToast.setGravity(Gravity.CENTER | Gravity.CENTER, 0, 0);
 		customToast.show();
 		mapHandler.gpsUpdate(location);
-		
-		
-		
 	}
 
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
 
+	}
 
-	//		GPSTracker tracker = new GPSTracker(MyMapActivity.this);
-	//	Location myLocation = tracker.getLocation();
-	//		 Context context = this.getApplicationContext();
-	//		 ClientSender cs = new ClientSender(context);
-	//		 MapHandler handler = new MapHandler(theMap, cs, myUser);
-	//		 handler.gpsUpdate(locMan.getLastKnownLocation(locMan.GPS_PROVIDER));
-	//		 locMan = (LocationManager) this.getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-	//		 alienLocationListener listener = new alienLocationListener(handler);
-	//		 locMan.requestLocationUpdates(locMan.NETWORK_PROVIDER, 1000, 0, listener);
+	@Override
+	public void onProviderEnabled(String provider) {
+		Toast.makeText(this, "Enabled new provider " + provider,
+				Toast.LENGTH_SHORT).show();
 
+	}
 
-
-
-@Override
-public void onStatusChanged(String provider, int status, Bundle extras) {
-  // TODO Auto-generated method stub
-
+	@Override
+	public void onProviderDisabled(String provider) {
+		Toast.makeText(this, "Disabled provider " + provider,
+				Toast.LENGTH_SHORT).show();
+	}
 }
-
-@Override
-public void onProviderEnabled(String provider) {
-  Toast.makeText(this, "Enabled new provider " + provider,
-      Toast.LENGTH_SHORT).show();
-
-}
-
-@Override
-public void onProviderDisabled(String provider) {
-  Toast.makeText(this, "Disabled provider " + provider,
-      Toast.LENGTH_SHORT).show();
-}
-} 
-
-
