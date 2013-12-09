@@ -19,6 +19,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -40,6 +41,7 @@ public class MyMapActivity extends FragmentActivity implements LocationListener{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		super.onCreate(savedInstanceState);		
 		Intent i = getIntent();
         String name = i.getStringExtra("name");
