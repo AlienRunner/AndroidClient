@@ -6,17 +6,18 @@ import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.support.v4.content.AsyncTaskLoader;
 
-public class PlaySoundTask extends AsyncTask<ClientSender, Void, Boolean>{
+public class PlaySoundTask extends AsyncTask<MapHandler, Void, Boolean>{
 	private User myUser;
+	private MapHandler mapHandler;
 	
 	public PlaySoundTask(User myUser){
 		this.myUser = myUser;
 	}
 
 	@Override
-	protected Boolean doInBackground(ClientSender... params) {
-		ClientSender cs = params[0];
-		double leastdistance = cs.getLeastDistance(myUser, cs.setAndFetch(myUser));
+	protected Boolean doInBackground(MapHandler... params) {
+		mapHandler = params[0];
+		double leastdistance = mapHandler.getLeastDistance();
 		double timeToSleep = timeToSleep(leastdistance);
 		try {
 			Thread.sleep((long) timeToSleep);

@@ -66,5 +66,11 @@ public class User {//implements Serializable{
 	    if (!(o instanceof User)) return false;
 	    return equals((User)o);
 	}
+	
+	public String encrypt(){
+		String userString = "[" + userId + "," + xCoord
+		+ "," + yCoord + "," + race + "]";
+		return userString;
+	}
 
 }

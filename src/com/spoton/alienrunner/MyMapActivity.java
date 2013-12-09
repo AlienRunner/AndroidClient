@@ -1,5 +1,7 @@
 package com.spoton.alienrunner;
 
+import java.io.IOException;
+import java.net.Socket;
 import java.util.ArrayList;
 
 import android.os.Bundle;
@@ -31,8 +33,8 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 	private GoogleMap theMap;
 	private LocationManager locMan;
 	private MapHandler mapHandler;
-	private ClientSender cs;
 	private Context context;
+	public User myUser;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,22 +53,24 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 				.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 		double lat = lastLoc.getLatitude();
 		double lng = lastLoc.getLongitude();
-		User myUser = new User(name, lat, lng, race);
-
+		
+		
 		if (theMap == null) {
+			System.out.println("KARTAN €R NULL!");
 			FragmentManager fmanager = getSupportFragmentManager();
 			Fragment fragment = fmanager.findFragmentById(R.id.map);
 			SupportMapFragment supportmapfragment = (SupportMapFragment) fragment;
 			theMap = supportmapfragment.getMap();
-		}else{
+			System.out.println("KARTAN €R LADDAD!" + theMap);
+		} else {
 			System.out.println("KARTAN €R LADDAD!");
 			theMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 		}
 		
-		cs = new ClientSender(context);
-		mapHandler = new MapHandler(theMap, cs, myUser);
-		System.out.println("Doing update Players");
-		mapHandler.gpsUpdate(lastLoc);
+		this.myUser = new User(name, lat, lng, race);
+		mapHandler = new MapHandler(theMap, myUser, context);
+		
+//		mapHandler.gpsUpdate(lastLoc);
 	}
 
 	@Override

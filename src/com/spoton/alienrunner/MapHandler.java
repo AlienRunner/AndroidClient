@@ -1,13 +1,14 @@
 package com.spoton.alienrunner;
 
+import java.io.IOException;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import android.content.Context;
-import android.content.Intent;
 import android.location.Location;
-import android.location.LocationManager;
+import android.os.StrictMode;
 import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -21,32 +22,63 @@ public class MapHandler {
 	private int marinesIcon, alienIcon, alienUserIcon, marinesUserIcon, userIcon;
 	private Marker myMarker;
 	private GoogleMap map;
-	private ClientSender cs;
-	private User myUser;
+	public User myUser;
 	private ArrayList<User> oponentList;
-	private ArrayList<User> updatedOponentList;
+	public ArrayList<User> updatedOponentList;
 	private HashMap<User, Marker> markersList;
+	public static String SERVER_IP = "213.67.75.254";
+	public Socket socket;
+	private ClientSend cs;
+	private ClientListener cl;
+	private Context context;
 
-	MapHandler(GoogleMap theMap, ClientSender clientSender, User myuser) {
-
+	MapHandler(GoogleMap theMap, User myUser, Context context) {
+		System.out.println("___THIS IS THE MAPHANDLER CONSTRUCTOR BEGINNING:____");
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.setThreadPolicy(policy); 
 		this.map = theMap;
-		this.cs = clientSender;
-		this.myUser = myuser;
+		this.myUser = myUser;
 		markersList = new HashMap<User, Marker>();
 		oponentList = new ArrayList<User>();
 		updatedOponentList = new ArrayList<User>();
+		this.context = context;
         marinesIcon = R.drawable.marines_point;
         alienIcon = R.drawable.alien_point;
         alienUserIcon = R.drawable.broodmother_point;
 		marinesUserIcon = R.drawable.arnold_point;
 		
-		System.out.println("___THIS IS THE MAPHANDLER CONSTRUCOT AND THE CURR RACE:____" + myuser.getRace());
-		if (myuser.getRace() == "Alien") {
-			System.out.println("___Now ALIEN:____" + myuser.getRace());
+		System.out.println("___THIS IS THE MAPHANDLER CONSTRUCOT AND THE CURR RACE:____" + myUser.getRace());
+		if (myUser.getRace() == "Alien") {
+			System.out.println("___Now ALIEN:____" + myUser.getRace());
 			this.userIcon = alienUserIcon;
 		}else{
-			System.out.println("___Now ARNOLD:____" + myuser.getRace());
+			System.out.println("___Now ARNOLD:____" + myUser.getRace());
 			this.userIcon = marinesUserIcon;
+		}
+		
+		System.out.println("Doing update Players");
+		try {
+			if (socket == null) {
+				socket = new Socket(SERVER_IP, 21101);
+				System.out.println("Socket created and connected!");
+			}else{
+				System.out.println("Socket not null!");
+			}
+			if(socket.isConnected()){
+				System.out.println("Socket connected!");
+				System.out.println("Creates listener!");
+				this.cl = new ClientListener(socket, this, context);
+				System.out.println("Creates sender!");
+				this.cs = new ClientSend(socket, myUser);
+				System.out.println("Starting client threads!");
+				cl.start();
+				cs.start();
+			}else{
+				System.out.println("Socket not ready!");
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -89,7 +121,7 @@ public class MapHandler {
 	public void updatePlayers() {
 
 		// Collects all players from database at server.
-		updatedOponentList = cs.setAndFetch(myUser);
+//		updatedOponentList = cs.setAndFetch(myUser);
 		Log.d("updatedOponentList", "Got updatedOponentList:"
 				+ updatedOponentList);
 		Log.d("updatedOponentList SIZE",
@@ -196,5 +228,50 @@ public class MapHandler {
 			icon = marinesIcon;
 		}
 		return icon;
+	}
+	
+	public User getClosestUser() {
+		Iterator<User> iter = oponentList.iterator();
+		double dist = Double.MAX_VALUE;
+		double x1 = myUser.getxCoord();
+		double y1 = myUser.getyCoord();
+		User listUser = null;
+		while (iter.hasNext()) {
+			User tempUser = iter.next();
+			double x2 = tempUser.getxCoord();
+			double y2 = tempUser.getyCoord();
+			double tempDist = getDistance(x1, y1, x2, y2);
+			if (tempDist < dist) {
+				dist = tempDist;
+				listUser = tempUser;
+			}
+		}
+		return listUser;
+	}
+
+	public double getLeastDistance() {
+		Iterator<User> iter = oponentList.iterator();
+		double dist = Double.MAX_VALUE;
+		double x1 = myUser.getxCoord();
+		double y1 = myUser.getyCoord();
+		while (iter.hasNext()) {
+			User tempUser = iter.next();
+			double x2 = tempUser.getxCoord();
+			double y2 = tempUser.getyCoord();
+			double tempDist = getDistance(x1, y1, x2, y2);
+			if (tempDist < dist) {
+				dist = tempDist;
+			}
+		}
+		return dist;
+	}
+
+	private double getDistance(double x1, double y1, double x2, double y2) {
+		double theDistance = (Math.sin(Math.toRadians(x1))
+				* Math.sin(Math.toRadians(x2)) + Math.cos(Math.toRadians(x1))
+				* Math.cos(Math.toRadians(x2))
+				* Math.cos(Math.toRadians(y1 - y2)));
+		return (Math.toDegrees(Math.acos(theDistance)) * 69.09 * 1.6093);
+		// return (Math.toDegrees(Math.acos(theDistance)) * 69.09 * 1.6093);
 	}
 }
