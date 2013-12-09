@@ -3,11 +3,13 @@ package com.spoton.alienrunner;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
@@ -28,6 +30,7 @@ public class MapHandler {
 	private ClientSender cs;
 	private User myUser;
 	private ArrayList<User> oponentList;
+	private ArrayList<User> updatedOponentList;
 	private HashMap<User, Marker> markersList;
 
 	MapHandler(GoogleMap theMap, ClientSender clientSender, User myuser) {
@@ -35,7 +38,9 @@ public class MapHandler {
 		this.map = theMap;
 		this.cs = clientSender;
 		this.myUser = myuser;
-		markersList = new HashMap<User, Marker>(); 
+		markersList = new HashMap<User, Marker>();
+		oponentList = new ArrayList<User>();
+		updatedOponentList = new ArrayList<User>();
 
 	}
 
@@ -64,47 +69,78 @@ public class MapHandler {
 		map.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(location
 				.getLatitude(), location.getLongitude())), 3000, null);
 
-		//updatePlayers();
+		updatePlayers();
 	}
 
 	// Fetch Updates from server and update all players and markers;
 	public void updatePlayers() {
 
 		// Collects all players from database at server.
-		ArrayList<User> updatedOponentList = cs.setAndFetch(myUser);
+		updatedOponentList = cs.setAndFetch(myUser);
+		Log.d("updatedOponentList", "Got updatedOponentList:" +updatedOponentList);
+		Log.d("updatedOponentList SIZE", String.valueOf(updatedOponentList.size()));
 		if (updatedOponentList != null) {
-
+			System.out.println("inne i if satts");
 			// 1. Remove players from map and from hashmap.
-			ArrayList<User> copyOponentList = oponentList;
-			copyOponentList.removeAll(updatedOponentList);
+			ArrayList<User> copyOponentList = (ArrayList<User>) oponentList.clone();
+			Log.d("Size of copyOponentlist before remove", String.valueOf(copyOponentList.size()));
+			
+			
+			//JUST A COPY
+			ArrayList<User> temp1 = (ArrayList<User>) updatedOponentList.clone();
+			
+			copyOponentList.removeAll(temp1);
+			Log.d("Size of copyOponentlist after remove", String.valueOf(copyOponentList.size()));
+			// NOW copyOponentList only contains users that have left the game!!
+			if(copyOponentList.size() > 0){
 			Iterator<User> it = copyOponentList.iterator();
 			while (it.hasNext()) {
+				System.out.println("ITTERARER");
 				User aUser = it.next();
 				Marker aMarker = markersList.get(aUser);
 				aMarker.remove();
 				markersList.remove(aUser);
+			
 			}
-
+			}
 			// 2. Update players position that all ready exist.
-			ArrayList<User> copyUpdatedtOponentList = updatedOponentList;
-			copyUpdatedtOponentList.retainAll(oponentList);
-
-			it = copyUpdatedtOponentList.iterator();
+			System.out.println("NUMBER 2 UPDATE PLAYERS");
+			ArrayList<User> copyUpdatedtOponentList = (ArrayList<User>) updatedOponentList.clone();
+			//SAVES OBJECT THAT EXIST IN BOTH LISTS
+			//TEMP2
+			ArrayList<User> temp2 = (ArrayList<User>) oponentList.clone();
+			Log.d("SIZE BEFORE RETAIN ALL copyUpdatedOponnentList", String.valueOf(copyUpdatedtOponentList.size()) );
+			copyUpdatedtOponentList.retainAll(temp2);
+			Log.d("SIZE AFTER RETAIN ALL copyUpdatedOponnentList", String.valueOf(copyUpdatedtOponentList.size()) );
+			
+			Iterator<User> it = copyUpdatedtOponentList.iterator();
 			while (it.hasNext()) {
 				User aUser = it.next();
+				Log.d("UPDATING MARKER", aUser.getUserId());
 				Marker aMarker = markersList.get(aUser);
-
 				LatLng coords = new LatLng(aUser.getxCoord(), aUser.getyCoord());
 				aMarker.setPosition(coords);
 			}
 
 			// 3. Add new players to Gmap and HashMap
-			copyUpdatedtOponentList = updatedOponentList;
+			Log.d("NUMBER3", "NUMBER3");
+			
+			Log.d("Size OF UpdatedtOponentList BEFORE remove ALL" , String.valueOf(updatedOponentList.size()));
+			
+			copyUpdatedtOponentList = (ArrayList<User>) updatedOponentList.clone();
+			Log.d("Size OF copyUpdatedtOponentList BEFORE remove ALL" , String.valueOf(copyUpdatedtOponentList.size()));
+			
 			copyUpdatedtOponentList.removeAll(oponentList);
-			it = copyUpdatedtOponentList.iterator();
-			while (it.hasNext()) {
+			
+			Log.d("Size OF copyUpdatedtOponentList After remove ALL" , String.valueOf(copyUpdatedtOponentList.size()));
+				
+			Iterator<User> it2 = copyUpdatedtOponentList.iterator();
+			
+			while (it2.hasNext()) {
 				// Display new Marker on Gmap
-				User aUser = it.next();
+				
+				User aUser = it2.next();
+				Log.d("ADDS NEW PLATER TO MAP", aUser.getUserId());
 				Marker newMarker = map
 						.addMarker(new MarkerOptions()
 						.position(
@@ -112,7 +148,7 @@ public class MapHandler {
 										.getyCoord()))
 										.title("User:" + aUser.getUserId())
 										// TODO Get icon working(Arnold?)
-										.snippet("A Snippet information"));
+										.snippet(aUser.getRace()));
 
 				// Add marker to hashmap
 				markersList.put(aUser, newMarker);
