@@ -6,8 +6,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Iterator;
+
+import com.google.android.gms.common.data.e;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
 
@@ -16,6 +20,8 @@ public class ClientListener extends Thread {
 	private Socket sock;
 	private MapHandler mh;
 	private Context context;
+	private ArrayList<User> theList;
+	private int i;
 
 	public ClientListener(Socket s, MapHandler mh, Context context)
 			throws IOException {
@@ -23,19 +29,26 @@ public class ClientListener extends Thread {
 		this.mh = mh;
 		this.is = sock.getInputStream();
 		this.context = context;
+		i = 0;
 	}
 
 	public void run() {
 		try {
 			System.out.println("In ClientListener run beginning");
 			BufferedReader in = new BufferedReader(new InputStreamReader(is));
+			this.theList = new ArrayList<User>();
 			while (sock.isConnected()) {
 				System.out.println("Socket is connected, waiting for input...");
 				String answer = in.readLine() + System.getProperty("line.separator");
 				System.out.println("Client Recieved1: " + answer + " ");
 				char c = answer.charAt(0);
 				if (c == '[') {
-					mh.updatedOponentList = jsonToUser(answer);
+					theList = jsonToUser(answer);
+					mh.getList(this);
+//					if(this.i < 1){
+//						mh.updatePlayers();	
+//						i = 1;
+//					}
 				} else {
 					Toast customToast = new Toast(context);
 					customToast = Toast.makeText(context, answer,
@@ -66,5 +79,8 @@ public class ClientListener extends Thread {
 			list.add(u);
 		}
 		return list;
+	}
+	public ArrayList<User> fetchTheList(){
+		return theList;
 	}
 }

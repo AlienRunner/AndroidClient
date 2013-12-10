@@ -35,6 +35,10 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 	private MapHandler mapHandler;
 	private Context context;
 	public User myUser;
+	public static String SERVER_IP = "213.67.75.254";
+	public Socket socket;
+	private ClientSend cs;
+	private ClientListener cl;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,22 +66,48 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 			SupportMapFragment supportmapfragment = (SupportMapFragment) fragment;
 			theMap = supportmapfragment.getMap();
 			System.out.println("KARTAN €R LADDAD!" + theMap);
-		} else {
-			System.out.println("KARTAN €R LADDAD!");
-			theMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+			if(theMap!=null){
+				System.out.println("KARTAN €R LADDAD!");
+				theMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+			}
 		}
 		
 		this.myUser = new User(name, lat, lng, race);
 		mapHandler = new MapHandler(theMap, myUser, context);
+		mapHandler.gpsUpdate(lastLoc);
+		System.out.println("Creating socket");
+		try {
+			if (socket == null) {
+				socket = new Socket(SERVER_IP, 21101);
+				System.out.println("Socket created and connected!");
+			}else{
+				System.out.println("Socket not null!");
+			}
+			if(socket.isConnected()){
+				System.out.println("Socket connected!");
+				System.out.println("Creates listener!");
+				this.cl = new ClientListener(socket, mapHandler, context);
+				System.out.println("Creates sender!");
+				this.cs = new ClientSend(socket, myUser);
+				System.out.println("Starting client threads!");
+				cl.start();
+				cs.start();
+			}else{
+				System.out.println("Socket not ready!");
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-//		mapHandler.gpsUpdate(lastLoc);
+		
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 		System.out.println("FLIPPED THAT S");
-		locMan.requestLocationUpdates(locMan.GPS_PROVIDER, 400, 1, this);
+		locMan.requestLocationUpdates(locMan.GPS_PROVIDER, 3000, 0, this);
 	}
 
 	@Override
@@ -93,7 +123,7 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 
 		Toast customToast = new Toast(getApplicationContext());
 		customToast = Toast.makeText(getApplicationContext(),
-				String.valueOf(location.getLongitude()), Toast.LENGTH_SHORT);
+				"Location changed", Toast.LENGTH_SHORT);
 		customToast.setGravity(Gravity.CENTER | Gravity.CENTER, 0, 0);
 		customToast.show();
 		mapHandler.gpsUpdate(location);
