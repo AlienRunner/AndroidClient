@@ -65,39 +65,18 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-//	public void sendMessage(View view) {
-		// EditText editText = (EditText) findViewById(R.id.edit_message);
-		// message = editText.getText().toString() +
-		// System.getProperty("line.separator"); //Line separator or the
-		// server's BufferedReader in.readLine() in will hang forever
-		// locMan = (LocationManager)
-		// getSystemService(Context.LOCATION_SERVICE);
-		// Location lastLoc = locMan
-		// .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		// double lat = lastLoc.getLatitude();
-		// double lng = lastLoc.getLongitude();
-		// LatLng lastLatLng = new LatLng(lat, lng);
-		// message = lastLatLng.toString() +
-		// System.getProperty("line.separator");
-		// dh.sendMessage("___HŠr kommer ett meddelande!___");
-		// new ClientSender(context).execute(message);
-		// clientSender.execute(message);
-		// cs.sendMessage("THIS IS message_______");
-		// Toast.makeText(MainActivity.this, "hi", Toast.LENGTH_LONG).show();
-		// User myUser = new User("Johan", 55, 44);
-		// cs.setAndFetch(myUser);
-//	}
-
 	public void openMap(View view) {
-		if(this.race == null){
+		if (this.race == null) {
 			System.out.println("___Choose race!__");
 			Toast customToast = new Toast(getApplicationContext());
-			customToast = Toast.makeText(getApplicationContext(), "Select your (race)role first!", Toast.LENGTH_SHORT);
-			customToast.setGravity(Gravity.CENTER|Gravity.CENTER, 0, 0);
+			customToast = Toast.makeText(getApplicationContext(),
+					"Select your (race)role first!", Toast.LENGTH_SHORT);
+			customToast.setGravity(Gravity.CENTER | Gravity.CENTER, 0, 0);
 			customToast.show();
-		}else{
+		} else {
 			System.out.println("___Opening map!__");
-			Intent mapScreen = new Intent(getApplicationContext(), MyMapActivity.class);
+			Intent mapScreen = new Intent(getApplicationContext(),
+					MyMapActivity.class);
 			mapScreen.putExtra("race", this.race);
 			mapScreen.putExtra("name", inputName.getText().toString());
 			startActivity(mapScreen);

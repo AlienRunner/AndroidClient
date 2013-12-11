@@ -6,63 +6,64 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Iterator;
-
-import com.google.android.gms.common.data.e;
 
 import android.content.Context;
-import android.util.Log;
+import android.os.Handler;
 import android.view.Gravity;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 public class ClientListener extends Thread {
 	private InputStream is;
-	private Socket sock;
+	private BufferedReader in;
 	private MapHandler mh;
-	private Context context;
 	private ArrayList<User> theList;
-	private int i;
+	final int MARKER_UPDATE_INTERVAL = 2000;
+	Marker marker;
+	Handler handler;
+	GoogleMap theMap;
 
-	public ClientListener(Socket s, MapHandler mh, Context context)
-			throws IOException {
-		this.sock = s;
+	public ClientListener(GoogleMap theMap, Handler handler, Socket s,
+			MapHandler mh) {
+		// TODO Auto-generated constructor stub
+		this.theMap = theMap;
+		this.handler = handler;
 		this.mh = mh;
-		this.is = sock.getInputStream();
-		this.context = context;
-		i = 0;
+		try {
+			this.is = s.getInputStream();
+			this.in = new BufferedReader(new InputStreamReader(is));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void run() {
+		System.out.println("___RUN ClientListener");
+		this.theList = new ArrayList<User>();
+		String answer;
 		try {
-			System.out.println("In ClientListener run beginning");
-			BufferedReader in = new BufferedReader(new InputStreamReader(is));
-			this.theList = new ArrayList<User>();
-			while (sock.isConnected()) {
-				System.out.println("Socket is connected, waiting for input...");
-				String answer = in.readLine() + System.getProperty("line.separator");
-				System.out.println("Client Recieved1: " + answer + " ");
-				char c = answer.charAt(0);
-				if (c == '[') {
-					theList = jsonToUser(answer);
-					mh.getList(this);
-//					if(this.i < 1){
-//						mh.updatePlayers();	
-//						i = 1;
-//					}
-				} else {
-					Toast customToast = new Toast(context);
-					customToast = Toast.makeText(context, answer,
-							Toast.LENGTH_SHORT);
-					customToast.setGravity(Gravity.CENTER | Gravity.CENTER, 0,
-							0);
-					customToast.show();
-				}
-				System.out.println("Client Recieved2: " + answer + " ");
+			answer = in.readLine() + System.getProperty("line.separator");
+			System.out.println("Client Recieved1: " + answer + " ");
+			char c = answer.charAt(0);
+			if (c == '[') {
+				System.out.println("__ in if: c == '[' " + mh.test + " ");
+				theList = jsonToUser(answer);
+				mh.getList(this);
+				mh.updatePlayers();
+			} else {
+				System.out.println("__ in else: c == '[' " + answer + " ");
 			}
 		} catch (IOException e) {
-			System.out.println("Exception:" + e);
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		handler.postDelayed(this, MARKER_UPDATE_INTERVAL);
+		System.out.println("__ ClientListener run done!");
 	}
 
 	private ArrayList<User> jsonToUser(String answer) {
@@ -80,7 +81,8 @@ public class ClientListener extends Thread {
 		}
 		return list;
 	}
-	public ArrayList<User> fetchTheList(){
+
+	public ArrayList<User> fetchTheList() {
 		return theList;
 	}
 }

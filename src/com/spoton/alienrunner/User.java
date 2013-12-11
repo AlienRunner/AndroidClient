@@ -62,10 +62,6 @@ public class User {//implements Serializable{
 		}
 	}
 
-	@Override public boolean equals(Object o) {
-	    if (!(o instanceof User)) return false;
-	    return equals((User)o);
-	}
 	
 	public String encrypt(){
 		String userString = "[" + userId + "," + xCoord

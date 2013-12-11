@@ -2,43 +2,40 @@ package com.spoton.alienrunner;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
 
-import android.os.Bundle;
-
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.Gravity;
-import android.view.Menu;
+import android.view.KeyEvent;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Marker;
 
 public class MyMapActivity extends FragmentActivity implements LocationListener {
 	private GoogleMap theMap;
 	private LocationManager locMan;
-	private MapHandler mapHandler;
+	public MapHandler mapHandler;
 	private Context context;
 	public User myUser;
 	public static String SERVER_IP = "213.67.75.254";
 	public Socket socket;
 	private ClientSend cs;
-	private ClientListener cl;
+	final int MARKER_UPDATE_INTERVAL = 2000;
+	final Handler handler = new Handler(Looper.getMainLooper());
+	Marker marker;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +43,10 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_my_map);
 		context = this.getApplicationContext();
+
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+				.permitAll().build();
+		StrictMode.setThreadPolicy(policy);
 
 		Intent i = getIntent();
 		String name = i.getStringExtra("name");
@@ -57,8 +58,7 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 				.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 		double lat = lastLoc.getLatitude();
 		double lng = lastLoc.getLongitude();
-		
-		
+
 		if (theMap == null) {
 			System.out.println("KARTAN €R NULL!");
 			FragmentManager fmanager = getSupportFragmentManager();
@@ -66,41 +66,40 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 			SupportMapFragment supportmapfragment = (SupportMapFragment) fragment;
 			theMap = supportmapfragment.getMap();
 			System.out.println("KARTAN €R LADDAD!" + theMap);
-			if(theMap!=null){
+			if (theMap != null) {
 				System.out.println("KARTAN €R LADDAD!");
 				theMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 			}
 		}
-		
+
 		this.myUser = new User(name, lat, lng, race);
-		mapHandler = new MapHandler(theMap, myUser, context);
+		this.mapHandler = new MapHandler(theMap, myUser, context);
 		mapHandler.gpsUpdate(lastLoc);
+		mapHandler.centerCamera();
+
 		System.out.println("Creating socket");
 		try {
 			if (socket == null) {
 				socket = new Socket(SERVER_IP, 21101);
 				System.out.println("Socket created and connected!");
-			}else{
+			} else {
 				System.out.println("Socket not null!");
 			}
-			if(socket.isConnected()){
-				System.out.println("Socket connected!");
-				System.out.println("Creates listener!");
-				this.cl = new ClientListener(socket, mapHandler, context);
+			if (socket.isConnected()) {
+
 				System.out.println("Creates sender!");
 				this.cs = new ClientSend(socket, myUser);
 				System.out.println("Starting client threads!");
-				cl.start();
+				ClientListener updateMarker = new ClientListener(theMap,
+						handler, socket, mapHandler);
+				handler.postDelayed(updateMarker, MARKER_UPDATE_INTERVAL);
 				cs.start();
-			}else{
+			} else {
 				System.out.println("Socket not ready!");
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
 	}
 
 	@Override
@@ -147,4 +146,15 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 		Toast.makeText(this, "Disabled provider " + provider,
 				Toast.LENGTH_SHORT).show();
 	}
+
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+			System.out.println("!!!!!!!!!!!!CLOSING ACTIVITY!!!!!!!!");
+			myUser = null;
+			theMap.clear();
+			finish();
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
 }

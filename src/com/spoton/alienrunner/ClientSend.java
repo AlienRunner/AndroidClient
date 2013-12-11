@@ -25,7 +25,6 @@ public class ClientSend extends Thread {
 			userInfo = myUser.encrypt();
 			System.out.println("___Client Sends: " + userInfo);
 			try {
-//				userInfo = new User("Pelle", 66, 99,"Alien").encrypt();
 				out.write(userInfo + System.getProperty("line.separator"));
 				out.flush();
 			} catch (IOException e) {
@@ -41,5 +40,6 @@ public class ClientSend extends Thread {
 				Log.e("TAG", "local Thread error", e);
 			}
 		}
+
 	}
 }
