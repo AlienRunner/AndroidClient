@@ -124,6 +124,8 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 			e.printStackTrace();
 		}
 		this.sm = new SensorMonitor(mapHandler, context, myUser);
+		MediaPlayerThread mt = new MediaPlayerThread(context, handler, mapHandler);
+		mt.start();
 	}
 
 	@Override

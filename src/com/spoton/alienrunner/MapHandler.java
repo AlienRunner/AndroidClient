@@ -169,7 +169,7 @@ public class MapHandler {
 		}
 		return listUser;
 	}
-	
+
 	public User getClosestEvac() {
 		Iterator<User> iter = oldList.iterator();
 		double dist = Double.MAX_VALUE;
@@ -195,20 +195,10 @@ public class MapHandler {
 	// @return distance to the closest person on the map.
 	// in Meter!
 	public double getLeastDistance() {
-		Iterator<User> iter = oldList.iterator();
-		double dist = Double.MAX_VALUE;
-		double x1 = myUser.getxCoord();
-		double y1 = myUser.getyCoord();
-		while (iter.hasNext()) {
-			User tempUser = iter.next();
-			double x2 = tempUser.getxCoord();
-			double y2 = tempUser.getyCoord();
-			double tempDist = getDistance(x1, y1, x2, y2);
-			if (tempDist < dist) {
-				dist = tempDist;
-			}
-		}
-		return dist;
+		if (myUser.getRace().equals("Alien")) {
+			return getClosestMarineDistance();
+		} else
+			return getClosestAlienDistance();
 	}
 
 	public double getClosestMarineDistance() {
@@ -250,6 +240,25 @@ public class MapHandler {
 		return dist;
 	}
 
+	public double getClosestAlienDistance() {
+		Iterator<User> iter = oldList.iterator();
+		double dist = Double.MAX_VALUE;
+		double x1 = myUser.getxCoord();
+		double y1 = myUser.getyCoord();
+		while (iter.hasNext()) {
+			User tempUser = iter.next();
+			if (tempUser.getRace().equals("Alien")) {
+				double x2 = tempUser.getxCoord();
+				double y2 = tempUser.getyCoord();
+				double tempDist = getDistance(x1, y1, x2, y2);
+				if (tempDist < dist) {
+					dist = tempDist;
+				}
+			}
+		}
+		return dist;
+	}
+
 	private double getDistance(double x1, double y1, double x2, double y2) {
 		double theDistance = (Math.sin(Math.toRadians(x1))
 				* Math.sin(Math.toRadians(x2)) + Math.cos(Math.toRadians(x1))
@@ -271,4 +280,5 @@ public class MapHandler {
 		map.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(myUser
 				.getxCoord(), myUser.getyCoord())), 3000, null);
 	}
+
 }
