@@ -16,6 +16,7 @@ import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
@@ -47,7 +48,7 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
 				.permitAll().build();
 		StrictMode.setThreadPolicy(policy);
-
+		
 		Intent i = getIntent();
 		String name = i.getStringExtra("name");
 		String race = i.getStringExtra("race");
@@ -73,6 +74,19 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 		this.mapHandler = new MapHandler(theMap, myUser, context);
 		mapHandler.gpsUpdate(lastLoc);
 		mapHandler.centerCamera();
+		
+		Toast customToast = new Toast(context);
+		if(this.myUser.isAlien()){			
+		customToast = Toast.makeText(context,
+				"Try to catch a marine!", Toast.LENGTH_LONG);
+		}else{
+			customToast = Toast.makeText(context,
+				"GET TO THE CHOPPA!!", Toast.LENGTH_LONG);
+		}
+		customToast.setGravity(Gravity.CENTER | Gravity.CENTER, 0,
+				0);
+		customToast.show();
+
 
 		System.out.println("Creating socket...");
 		try {
@@ -86,9 +100,9 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 				this.cs = new ClientSend(socket, myUser);
 				ClientListener updateMarker = new ClientListener(theMap,
 						handler, socket, mapHandler);
-				VibrateThread vt = new VibrateThread(context, handler);
+//				VibrateThread vt = new VibrateThread(context, handler);
 //				vt.start();
-				handler.postDelayed(vt, MARKER_UPDATE_INTERVAL);
+//				handler.postDelayed(vt, MARKER_UPDATE_INTERVAL);
 				handler.postDelayed(updateMarker, MARKER_UPDATE_INTERVAL);
 				cs.start();
 			} else {

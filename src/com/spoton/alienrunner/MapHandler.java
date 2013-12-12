@@ -22,7 +22,7 @@ public class MapHandler {
 	private int marinesIcon, alienIcon, alienUserIcon, marinesUserIcon,
 			userIcon, currUserIcon, evacIcon;
 	private Marker myMarker;
-	private GoogleMap map;
+	public GoogleMap map;
 	public User myUser;
 	private ArrayList<User> oldList;
 	private ArrayList<User> newList;
@@ -117,11 +117,11 @@ public class MapHandler {
 						this.currUserIcon = alienIcon;
 						System.out.println("Setting otherIcon ALIEN"
 								+ aUser.getRace());
-					} else if(aUser.isMarine()){
+					} else if (aUser.isMarine()) {
 						System.out.println("Setting otehricon MARINE"
 								+ aUser.getRace());
 						this.currUserIcon = marinesIcon;
-					}else{
+					} else {
 						System.out.println("Setting othericon EVAC"
 								+ aUser.getRace());
 						this.currUserIcon = evacIcon;
@@ -130,7 +130,7 @@ public class MapHandler {
 							.position(
 									new LatLng(aUser.getxCoord(), aUser
 											.getyCoord()))
-							.title("Oponent:" + aUser.getUserId())
+							.title(aUser.getUserId())
 							.snippet(aUser.getRace())
 							.icon(BitmapDescriptorFactory
 									.fromResource(currUserIcon)));
@@ -149,7 +149,7 @@ public class MapHandler {
 		this.newList = newList;
 	}
 
-	public User getClosestUser() {
+	public User getClosestMarine() {
 		Iterator<User> iter = oldList.iterator();
 		double dist = Double.MAX_VALUE;
 		double x1 = myUser.getxCoord();
@@ -157,12 +157,36 @@ public class MapHandler {
 		User listUser = null;
 		while (iter.hasNext()) {
 			User tempUser = iter.next();
-			double x2 = tempUser.getxCoord();
-			double y2 = tempUser.getyCoord();
-			double tempDist = getDistance(x1, y1, x2, y2);
-			if (tempDist < dist) {
-				dist = tempDist;
-				listUser = tempUser;
+			if (tempUser.isMarine()) {
+				double x2 = tempUser.getxCoord();
+				double y2 = tempUser.getyCoord();
+				double tempDist = getDistance(x1, y1, x2, y2);
+				if (tempDist < dist) {
+					dist = tempDist;
+					listUser = tempUser;
+				}
+			}
+		}
+		return listUser;
+	}
+	
+	public User getClosestEvac() {
+		Iterator<User> iter = oldList.iterator();
+		double dist = Double.MAX_VALUE;
+		double x1 = myUser.getxCoord();
+		double y1 = myUser.getyCoord();
+		User listUser = null;
+		while (iter.hasNext()) {
+			User tempUser = iter.next();
+			System.out.println("COUNTING CLOSEST EVAC..." + tempUser.encrypt());
+			if (tempUser.isEvac()) {
+				double x2 = tempUser.getxCoord();
+				double y2 = tempUser.getyCoord();
+				double tempDist = getDistance(x1, y1, x2, y2);
+				if (tempDist < dist) {
+					dist = tempDist;
+					listUser = tempUser;
+				}
 			}
 		}
 		return listUser;
@@ -187,7 +211,7 @@ public class MapHandler {
 		return dist;
 	}
 
-	public double getClosestMarine() {
+	public double getClosestMarineDistance() {
 		Iterator<User> iter = oldList.iterator();
 		double dist = Double.MAX_VALUE;
 		double x1 = myUser.getxCoord();
@@ -206,7 +230,7 @@ public class MapHandler {
 		return dist;
 	}
 
-	public double getClosestEvac() {
+	public double getClosestEvacDistance() {
 		Iterator<User> iter = oldList.iterator();
 		double dist = Double.MAX_VALUE;
 		double x1 = myUser.getxCoord();
@@ -238,9 +262,9 @@ public class MapHandler {
 	public void getList(ClientListener clientListener) {
 		newList = clientListener.fetchTheList();
 	}
-	
-	public void setDirections(Location location){
-	
+
+	public void setDirections(Location location) {
+
 	}
 
 	public void centerCamera() {

@@ -1,5 +1,8 @@
 package com.spoton.alienrunner;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -49,23 +52,40 @@ public class SensorMonitor implements SensorEventListener {
 		if (user.isAlien()) {
 			// SENSOR IS MOVING ENOUGH (red -> green)
 			if (event.values[2] > 19 && !isChanging) {
-				int dist = (int) mh.getClosestMarine();
-				isChanging = true;
-				if (dist < 20) {
+				int dist = (int) mh.getClosestMarineDistance();
+				if (mh.getClosestMarine() != null) {
+					User target = mh.getClosestMarine();
+					isChanging = true;
+					if (target != null) {
+					if (dist < 20) {
+						customToast = Toast.makeText(context,
+								"YEAH! YOU JUST ATE A MARINE!",
+								Toast.LENGTH_LONG);
+						customToast.setGravity(Gravity.CENTER | Gravity.CENTER,
+								0, 0);
+						customToast.show();
+					} else {
+						customToast = Toast
+								.makeText(context,
+										"Try to get closer to the Marine! \n           Still  "
+												+ dist + " m left.",
+										Toast.LENGTH_SHORT);
+						customToast.setGravity(Gravity.BOTTOM | Gravity.CENTER,
+								0, 0);
+						customToast.show();
+					}
+					mh.map.animateCamera(CameraUpdateFactory
+							.newLatLng(new LatLng(target.getxCoord(), target
+									.getyCoord())), 3000, null);
+					paus = System.currentTimeMillis();
+				}
+			}else{
 					customToast = Toast.makeText(context,
-							"YEAH! YOU JUST ATE A MARINE!", Toast.LENGTH_SHORT);
-					customToast.setGravity(Gravity.CENTER | Gravity.CENTER, 0,
-							0);
-					customToast.show();
-				} else {
-					customToast = Toast.makeText(context,
-							"Try to get closer to the Marine! \n           Still  "
-									+ dist + " m left.", Toast.LENGTH_SHORT);
-					customToast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0,
-							0);
+							"THERE IS NO MARINE!!!", Toast.LENGTH_SHORT);
+					customToast.setGravity(Gravity.BOTTOM | Gravity.CENTER,
+							0, 0);
 					customToast.show();
 				}
-				paus = System.currentTimeMillis();
 			}
 			// SENSOR IS STILL MOVING BUT SHOULDN'T DO ANYTHING (changing)
 			if (isChanging && event.values[2] < 11
@@ -77,26 +97,40 @@ public class SensorMonitor implements SensorEventListener {
 				isChanging = true;
 				paus = System.currentTimeMillis();
 			}
-			//IF MARINE
+			// IF MARINE
 		} else {
 			if (event.values[2] > 19 && !isChanging) {
-				int dist = (int) mh.getClosestEvac();
+				int dist = (int) mh.getClosestEvacDistance();
 				isChanging = true;
-				if (dist < 20) {
+				User target = mh.getClosestEvac();
+				if (target != null) {
+					
+					if (dist < 20) {
+						customToast = Toast.makeText(context,
+								"YEAH! YOU JUST GOT EVACUATED!",
+								Toast.LENGTH_LONG);
+						customToast.setGravity(Gravity.CENTER | Gravity.CENTER,
+								0, 0);
+						customToast.show();
+					} else {
+						customToast = Toast.makeText(context,
+								"GET TO THE CHOPPA!!! \n     " + dist
+										+ " m left.", Toast.LENGTH_SHORT);
+						customToast.setGravity(Gravity.BOTTOM | Gravity.CENTER,
+								0, 0);
+						customToast.show();
+					}
+					mh.map.animateCamera(CameraUpdateFactory
+							.newLatLng(new LatLng(target.getxCoord(), target
+									.getyCoord())), 3000, null);
+					paus = System.currentTimeMillis();
+				}else{
 					customToast = Toast.makeText(context,
-							"YEAH! YOU JUST GOT EVACUATED!", Toast.LENGTH_SHORT);
-					customToast.setGravity(Gravity.CENTER | Gravity.CENTER, 0,
-							0);
-					customToast.show();
-				} else {
-					customToast = Toast.makeText(context,
-							"Try to get closer to the evac zone! \n           Still  "
-									+ dist + " m left.", Toast.LENGTH_SHORT);
-					customToast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0,
-							0);
+							"THERE IS NO CHOPPA!!!", Toast.LENGTH_SHORT);
+					customToast.setGravity(Gravity.BOTTOM | Gravity.CENTER,
+							0, 0);
 					customToast.show();
 				}
-				paus = System.currentTimeMillis();
 			}
 			// SENSOR IS STILL MOVING BUT SHOULDN'T DO ANYTHING (changing)
 			if (isChanging && event.values[2] < 11

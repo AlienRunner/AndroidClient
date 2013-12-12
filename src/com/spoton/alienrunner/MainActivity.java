@@ -11,6 +11,7 @@ import com.google.android.gms.maps.model.LatLng;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
@@ -32,6 +33,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.activity_main);
 		b1 = (Button) findViewById(R.id.button_alien);
 		b2 = (Button) findViewById(R.id.button_human);
