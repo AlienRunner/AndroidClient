@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import android.app.Activity;
@@ -14,6 +15,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -39,6 +41,9 @@ public class MainActivity extends Activity {
 		b2 = (Button) findViewById(R.id.button_human);
 
 		this.inputName = (EditText) findViewById(R.id.name);
+		MediaPlayer mp = MediaPlayer.create(MainActivity.this, R.raw.maktone);
+		mp.setLooping(true);
+		mp.start();
 	}
 
 	public void selectRoleAlien(View view) {
