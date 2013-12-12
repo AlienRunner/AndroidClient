@@ -14,6 +14,7 @@ public class MediaPlayerThread extends Thread implements OnCompletionListener{
 	final int MARKER_UPDATE_INTERVAL = 2000;
 	Handler handler;
 	private MapHandler mh;
+	private static MediaPlayer mp;
 
 	public MediaPlayerThread(Context context, Handler handler, MapHandler mg) {
 		this.context = context;
@@ -22,7 +23,7 @@ public class MediaPlayerThread extends Thread implements OnCompletionListener{
 	}
 
 	public void run() {
-		MediaPlayer mp = MediaPlayer.create(context, R.raw.tracker_active);
+		mp = MediaPlayer.create(context, R.raw.tracker_active);
 		mp.setOnCompletionListener(this);
 		handler.post(new MediaPlayerRunnable(mp));
 	}
