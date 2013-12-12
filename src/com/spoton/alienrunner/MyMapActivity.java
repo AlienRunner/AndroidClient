@@ -16,7 +16,6 @@ import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
@@ -87,6 +86,9 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 				this.cs = new ClientSend(socket, myUser);
 				ClientListener updateMarker = new ClientListener(theMap,
 						handler, socket, mapHandler);
+				VibrateThread vt = new VibrateThread(context, handler);
+//				vt.start();
+				handler.postDelayed(vt, MARKER_UPDATE_INTERVAL);
 				handler.postDelayed(updateMarker, MARKER_UPDATE_INTERVAL);
 				cs.start();
 			} else {

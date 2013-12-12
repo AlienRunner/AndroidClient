@@ -238,6 +238,10 @@ public class MapHandler {
 	public void getList(ClientListener clientListener) {
 		newList = clientListener.fetchTheList();
 	}
+	
+	public void setDirections(Location location){
+	
+	}
 
 	public void centerCamera() {
 		map.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(myUser
