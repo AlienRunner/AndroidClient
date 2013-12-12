@@ -15,26 +15,31 @@ public class VibrateThread extends Thread {
 		this.context = context;
 		this.handler = handler;
 		this.mh = mg;
-		vib = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 	}
 
 	public void run() {
+		while(true){
+			
 		double distance = mh.getLeastDistance();
 		try {
 			if (distance > 200) {
 				Thread.sleep(8000);
 			} else if (distance > 150) {
 				Thread.sleep(4000);
-			} else {
+			} else if (distance > 0){
 				Thread.sleep((long) distance * 26);
+			}else{
+				Thread.sleep(2000);
 			}
+				
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
-
-		vib.vibrate(500);
-		handler.postDelayed(this, MARKER_UPDATE_INTERVAL);
+		handler.postAtFrontOfQueue(new VibrateRunnable(context));
+		}
+	
+	
 	}
 
 }
