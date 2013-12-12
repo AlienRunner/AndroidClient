@@ -100,9 +100,9 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 				this.cs = new ClientSend(socket, myUser);
 				ClientListener updateMarker = new ClientListener(theMap,
 						handler, socket, mapHandler);
-//				VibrateThread vt = new VibrateThread(context, handler);
+				VibrateThread vt = new VibrateThread(context, handler, mapHandler);
 //				vt.start();
-//				handler.postDelayed(vt, MARKER_UPDATE_INTERVAL);
+				handler.postDelayed(vt, MARKER_UPDATE_INTERVAL);
 				handler.postDelayed(updateMarker, MARKER_UPDATE_INTERVAL);
 				cs.start();
 			} else {
