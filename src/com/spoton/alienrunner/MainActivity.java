@@ -31,6 +31,7 @@ public class MainActivity extends Activity {
 	Button b1;
 	Button b2;
 	String race = null;
+	MediaPlayer mp;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,7 @@ public class MainActivity extends Activity {
 		b2 = (Button) findViewById(R.id.button_human);
 
 		this.inputName = (EditText) findViewById(R.id.name);
-		MediaPlayer mp = MediaPlayer.create(MainActivity.this, R.raw.maktone);
+		mp = MediaPlayer.create(MainActivity.this, R.raw.maktone);
 		mp.setLooping(true);
 		mp.start();
 	}
@@ -84,6 +85,7 @@ public class MainActivity extends Activity {
 					MyMapActivity.class);
 			mapScreen.putExtra("race", this.race);
 			mapScreen.putExtra("name", inputName.getText().toString());
+			mp.release();
 			startActivity(mapScreen);
 		}
 	}
