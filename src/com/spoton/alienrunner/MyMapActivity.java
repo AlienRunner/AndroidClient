@@ -126,6 +126,8 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 		customToast.setGravity(Gravity.CENTER | Gravity.CENTER, 0, 0);
 		customToast.show();
 		this.sm = new SensorMonitor(mapHandler, context, myUser);
+		MediaPlayerThread mt = new MediaPlayerThread(context, handler, mapHandler);
+		mt.start();
 	}
 
 	@Override
