@@ -222,6 +222,26 @@ public class MapHandler {
 		}
 		return dist;
 	}
+	
+	public double getClosestEvac() {
+		Iterator<User> iter = oldList.iterator();
+		double dist = Double.MAX_VALUE;
+		double x1 = myUser.getxCoord();
+		double y1 = myUser.getyCoord();
+		while (iter.hasNext()) {
+			User tempUser = iter.next();
+			if(tempUser.getRace().equals(("Evac"))){
+				
+				double x2 = tempUser.getxCoord();
+				double y2 = tempUser.getyCoord();
+				double tempDist = getDistance(x1, y1, x2, y2);
+				if (tempDist < dist) {
+					dist = tempDist;
+				}
+			}
+		}
+		return dist;
+	}
 
 	private double getDistance(double x1, double y1, double x2, double y2) {
 		double theDistance = (Math.sin(Math.toRadians(x1))

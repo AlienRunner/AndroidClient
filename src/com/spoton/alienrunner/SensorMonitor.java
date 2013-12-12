@@ -45,6 +45,7 @@ public class SensorMonitor implements SensorEventListener {
 	@SuppressLint("NewApi")
 	@Override
 	public void onSensorChanged(SensorEvent event) {
+		// IF ALIEN
 		if (user.isAlien()) {
 			// SENSOR IS MOVING ENOUGH (red -> green)
 			if (event.values[2] > 19 && !isChanging) {
@@ -52,15 +53,45 @@ public class SensorMonitor implements SensorEventListener {
 				isChanging = true;
 				if (dist < 20) {
 					customToast = Toast.makeText(context,
-							"YEAH! YOU JUST ATE A MARINE!",
-							Toast.LENGTH_SHORT);
+							"YEAH! YOU JUST ATE A MARINE!", Toast.LENGTH_SHORT);
 					customToast.setGravity(Gravity.CENTER | Gravity.CENTER, 0,
 							0);
 					customToast.show();
 				} else {
 					customToast = Toast.makeText(context,
-							"Try to get closer to the Marine! \n           Still  " + dist + " m left.",
-							Toast.LENGTH_SHORT);
+							"Try to get closer to the Marine! \n           Still  "
+									+ dist + " m left.", Toast.LENGTH_SHORT);
+					customToast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0,
+							0);
+					customToast.show();
+				}
+				paus = System.currentTimeMillis();
+			}
+			// SENSOR IS STILL MOVING BUT SHOULDN'T DO ANYTHING (changing)
+			if (isChanging && event.values[2] < 11
+					&& System.currentTimeMillis() - paus > 800) {
+				isChanging = false;
+			}
+			// SENSOR IS NOT MOVING ENOUGH (red->green)
+			if (event.values[2] > 19 && !isChanging) {
+				isChanging = true;
+				paus = System.currentTimeMillis();
+			}
+			//IF MARINE
+		} else {
+			if (event.values[2] > 19 && !isChanging) {
+				int dist = (int) mh.getClosestEvac();
+				isChanging = true;
+				if (dist < 20) {
+					customToast = Toast.makeText(context,
+							"YEAH! YOU JUST GOT EVACUATED!", Toast.LENGTH_SHORT);
+					customToast.setGravity(Gravity.CENTER | Gravity.CENTER, 0,
+							0);
+					customToast.show();
+				} else {
+					customToast = Toast.makeText(context,
+							"Try to get closer to the evac zone! \n           Still  "
+									+ dist + " m left.", Toast.LENGTH_SHORT);
 					customToast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0,
 							0);
 					customToast.show();
