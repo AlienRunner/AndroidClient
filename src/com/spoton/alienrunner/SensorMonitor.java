@@ -49,7 +49,7 @@ public class SensorMonitor implements SensorEventListener {
 		if (user.isAlien()) {
 			// SENSOR IS MOVING ENOUGH (red -> green)
 			if (event.values[2] > 19 && !isChanging) {
-				int dist = (int) mh.getLeastDistance();
+				int dist = (int) mh.getClosestMarine();
 				isChanging = true;
 				if (dist < 20) {
 					customToast = Toast.makeText(context,

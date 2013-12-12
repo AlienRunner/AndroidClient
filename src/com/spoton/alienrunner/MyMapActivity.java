@@ -51,9 +51,7 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 
 		Intent i = getIntent();
 		String name = i.getStringExtra("name");
-		System.out.println("________NAME: " + name);
 		String race = i.getStringExtra("race");
-		System.out.println("________Race: " + race);
 		locMan = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		Location lastLoc = locMan
 				.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
@@ -61,12 +59,10 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 		double lng = lastLoc.getLongitude();
 
 		if (theMap == null) {
-			System.out.println("KARTAN €R NULL!");
 			FragmentManager fmanager = getSupportFragmentManager();
 			Fragment fragment = fmanager.findFragmentById(R.id.map);
 			SupportMapFragment supportmapfragment = (SupportMapFragment) fragment;
 			theMap = supportmapfragment.getMap();
-			System.out.println("KARTAN €R LADDAD!" + theMap);
 			if (theMap != null) {
 				System.out.println("KARTAN €R LADDAD!");
 				theMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
@@ -78,19 +74,16 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 		mapHandler.gpsUpdate(lastLoc);
 		mapHandler.centerCamera();
 
-		System.out.println("Creating socket");
+		System.out.println("Creating socket...");
 		try {
 			if (socket == null) {
 				socket = new Socket(SERVER_IP, 21101);
 				System.out.println("Socket created and connected!");
-			} else {
-				System.out.println("Socket not null!");
 			}
 			if (socket.isConnected()) {
 
-				System.out.println("Creates sender!");
+				System.out.println("Starting listener and sender threads...");
 				this.cs = new ClientSend(socket, myUser);
-				System.out.println("Starting client threads!");
 				ClientListener updateMarker = new ClientListener(theMap,
 						handler, socket, mapHandler);
 				handler.postDelayed(updateMarker, MARKER_UPDATE_INTERVAL);
@@ -101,14 +94,12 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 		this.sm = new SensorMonitor(mapHandler, context, myUser);
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		System.out.println("FLIPPED THAT S");
 		locMan.requestLocationUpdates(locMan.GPS_PROVIDER, 3000, 0, this);
 	}
 
@@ -120,14 +111,6 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 
 	@Override
 	public void onLocationChanged(Location location) {
-		System.out.println("LOCATION CHANGED, LONG:" + location.getLongitude()
-				+ " LAT: " + location.getLatitude());
-
-		Toast customToast = new Toast(getApplicationContext());
-		customToast = Toast.makeText(getApplicationContext(),
-				"Location changed", Toast.LENGTH_SHORT);
-		customToast.setGravity(Gravity.CENTER | Gravity.CENTER, 0, 0);
-		customToast.show();
 		mapHandler.gpsUpdate(location);
 	}
 

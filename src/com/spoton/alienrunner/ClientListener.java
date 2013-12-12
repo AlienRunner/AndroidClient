@@ -43,27 +43,23 @@ public class ClientListener extends Thread {
 	}
 
 	public void run() {
-		System.out.println("___RUN ClientListener");
 		this.theList = new ArrayList<User>();
 		String answer;
 		try {
+			System.out.println("Client waiting for input...");
 			answer = in.readLine() + System.getProperty("line.separator");
-			System.out.println("Client Recieved1: " + answer + " ");
+			System.out.println("Client Recieved: " + answer + " ");
 			char c = answer.charAt(0);
 			if (c == '[') {
-				System.out.println("__ in if: c == '[' " + mh.test + " ");
 				theList = jsonToUser(answer);
 				mh.getList(this);
 				mh.updatePlayers();
-			} else {
-				System.out.println("__ in else: c == '[' " + answer + " ");
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		handler.postDelayed(this, MARKER_UPDATE_INTERVAL);
-		System.out.println("__ ClientListener run done!");
 	}
 
 	private ArrayList<User> jsonToUser(String answer) {

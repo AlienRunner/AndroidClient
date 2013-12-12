@@ -31,7 +31,7 @@ public class ClientSend extends Thread {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println("___Client Send done: " + userInfo);
+			System.out.println("___Client Send done!");
 
 			try {
 				Log.d("TAG", "local Thread sleeping");

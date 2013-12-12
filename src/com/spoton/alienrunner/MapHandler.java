@@ -31,8 +31,6 @@ public class MapHandler {
 	public String test;
 
 	MapHandler(GoogleMap theMap, User myUser, Context context) {
-		System.out
-				.println("___THIS IS THE MAPHANDLER CONSTRUCTOR BEGINNING:____");
 		this.map = theMap;
 		this.myUser = myUser;
 		markersList = new HashMap<User, Marker>();
@@ -43,7 +41,6 @@ public class MapHandler {
 		alienIcon = R.drawable.alien_point;
 		alienUserIcon = R.drawable.broodmother_point;
 		marinesUserIcon = R.drawable.arnold_point;
-
 		if (myUser.getRace().equals("Alien")) {
 			this.userIcon = alienUserIcon;
 			System.out.println("Setting icon ALIEN" + myUser.getRace());
@@ -55,8 +52,6 @@ public class MapHandler {
 
 	// Is run by the listener eachtime a gps update is made.
 	public void gpsUpdate(Location location) {
-		System.out.println("Latitude: " + location.getLatitude());
-		System.out.println("Longitude " + location.getLongitude());
 		myUser.setxCoord(location.getLatitude());
 		myUser.setyCoord(location.getLongitude());
 		if (myMarker != null) {
@@ -76,31 +71,16 @@ public class MapHandler {
 	@SuppressWarnings("unchecked")
 	public void updatePlayers() {
 		System.out.println("__STARTING UPDATEPLAYERS___");
-		Iterator<User> iterNew = newList.iterator();
-		System.out.println("__PRINTS NEW LIST___");
-		while (iterNew.hasNext()) {
-			System.out.println("NEW: " + iterNew.next().encrypt());
-		}
-		Iterator<User> iterOld = oldList.iterator();
-		System.out.println("__PRINTS OLD LIST___");
-		while (iterOld.hasNext()) {
-			System.out.println("OLD: " + iterOld.next().encrypt());
-		}
-		System.out.println("__PRINTING PLAYER LISTS DONE___");
 		if (newList != null) {
 			// 1. Remove players from map and from hashmap.
 			ArrayList<User> copyOldList = (ArrayList<User>) oldList.clone();
-
 			// JUST A COPY
 			ArrayList<User> copyNewList = (ArrayList<User>) newList.clone();
-
 			copyOldList.removeAll(copyNewList);
-
 			// NOW copyOponentList only contains users that have left the game!!
 			if (copyOldList.size() > 0) {
 				Iterator<User> it = copyOldList.iterator();
 				while (it.hasNext()) {
-					System.out.println("Removes User from The Map:");
 					User aUser = it.next();
 					Marker aMarker = markersList.get(aUser);
 					aMarker.remove();
@@ -108,12 +88,10 @@ public class MapHandler {
 				}
 			}
 			// 2. Update players position that all ready exist.
-			System.out.println("NUMBER 2 UPDATE PLAYERS");
 			copyNewList = (ArrayList<User>) newList.clone();
 			// SAVES OBJECT THAT EXIST IN BOTH LISTS
 			copyOldList = (ArrayList<User>) oldList.clone();
 			copyNewList.retainAll(copyOldList);
-			System.out.println("___Done cloning for 2!" + copyNewList);
 			Iterator<User> it = copyNewList.iterator();
 			while (it.hasNext()) {
 				User aUser = it.next();
@@ -124,15 +102,11 @@ public class MapHandler {
 			}
 
 			// 3. Add new players to Gmap and HashMap
-
-			System.out.println("NUMBER 3 Add new players to Gmap and HashMap");
 			copyNewList = (ArrayList<User>) newList.clone();
 			copyOldList = (ArrayList<User>) oldList.clone();
 			copyNewList.removeAll(copyOldList);
-			System.out.println("Size of the List 3" + copyNewList.size());
 			if (copyNewList.size() > 0) {
 				Iterator<User> it2 = copyNewList.iterator();
-				System.out.println("___Done cloning for 3!");
 				User aUser;
 				while (it2.hasNext()) {
 					// Display new Marker on Gmap
@@ -147,8 +121,6 @@ public class MapHandler {
 								+ myUser.getRace());
 						this.currUserIcon = marinesIcon;
 					}
-
-					System.out.println("Users copyOfnew:" + aUser.encrypt());
 					checkIconType(aUser);
 					Marker newMarker = map.addMarker(new MarkerOptions()
 							.position(
@@ -165,11 +137,8 @@ public class MapHandler {
 			}
 			// Make list update;
 			oldList = newList;
-		} else {
-			System.out.println("No List has yes been updated");
 		}
-		System.out.println("__Done UPDATEOKAYERS___");
-
+		System.out.println("__DONE UPDATEPLAYERS___");
 	}
 
 	public void setUpdatedOponenList(ArrayList<User> newList) {
@@ -203,7 +172,7 @@ public class MapHandler {
 		}
 		return listUser;
 	}
-	
+
 	// @return distance to the closest person on the map.
 	// in Meter!
 	public double getLeastDistance() {
@@ -222,7 +191,26 @@ public class MapHandler {
 		}
 		return dist;
 	}
-	
+
+	public double getClosestMarine() {
+		Iterator<User> iter = oldList.iterator();
+		double dist = Double.MAX_VALUE;
+		double x1 = myUser.getxCoord();
+		double y1 = myUser.getyCoord();
+		while (iter.hasNext()) {
+			User tempUser = iter.next();
+			if (tempUser.getRace().equals("Marines")) {
+				double x2 = tempUser.getxCoord();
+				double y2 = tempUser.getyCoord();
+				double tempDist = getDistance(x1, y1, x2, y2);
+				if (tempDist < dist) {
+					dist = tempDist;
+				}
+			}
+		}
+		return dist;
+	}
+
 	public double getClosestEvac() {
 		Iterator<User> iter = oldList.iterator();
 		double dist = Double.MAX_VALUE;
@@ -230,8 +218,8 @@ public class MapHandler {
 		double y1 = myUser.getyCoord();
 		while (iter.hasNext()) {
 			User tempUser = iter.next();
-			if(tempUser.getRace().equals(("Evac"))){
-				
+			if (tempUser.getRace().equals(("Evac"))) {
+
 				double x2 = tempUser.getxCoord();
 				double y2 = tempUser.getyCoord();
 				double tempDist = getDistance(x1, y1, x2, y2);
@@ -248,10 +236,9 @@ public class MapHandler {
 				* Math.sin(Math.toRadians(x2)) + Math.cos(Math.toRadians(x1))
 				* Math.cos(Math.toRadians(x2))
 				* Math.cos(Math.toRadians(y1 - y2)));
-//		return (Math.toDegrees(Math.acos(theDistance)));
-		return Math.round((Math.toDegrees(Math.acos(theDistance)) * 69.09 * 1.6093*1000));
+		return Math
+				.round((Math.toDegrees(Math.acos(theDistance)) * 69.09 * 1.6093 * 1000));
 	}
-	
 
 	public void getList(ClientListener clientListener) {
 		newList = clientListener.fetchTheList();

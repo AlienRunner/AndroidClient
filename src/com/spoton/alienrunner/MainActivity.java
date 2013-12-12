@@ -67,14 +67,12 @@ public class MainActivity extends Activity {
 
 	public void openMap(View view) {
 		if (this.race == null) {
-			System.out.println("___Choose race!__");
 			Toast customToast = new Toast(getApplicationContext());
 			customToast = Toast.makeText(getApplicationContext(),
-					"Select your (race)role first!", Toast.LENGTH_SHORT);
+					"Select your race first!", Toast.LENGTH_SHORT);
 			customToast.setGravity(Gravity.CENTER | Gravity.CENTER, 0, 0);
 			customToast.show();
 		} else {
-			System.out.println("___Opening map!__");
 			Intent mapScreen = new Intent(getApplicationContext(),
 					MyMapActivity.class);
 			mapScreen.putExtra("race", this.race);
