@@ -44,9 +44,7 @@ public class MapHandler {
 		evacIcon = R.drawable.purple_point;
 		if (myUser.isAlien()) {
 			this.userIcon = alienUserIcon;
-			System.out.println("Setting icon ALIEN" + myUser.getRace());
 		} else {
-			System.out.println("Setting icon ARNOLD" + myUser.getRace());
 			this.userIcon = marinesUserIcon;
 		}
 	}
@@ -71,7 +69,6 @@ public class MapHandler {
 	// Fetch Updates from server and update all players and markers;
 	@SuppressWarnings("unchecked")
 	public void updatePlayers() {
-		System.out.println("__STARTING UPDATEPLAYERS___");
 		if (newList != null) {
 			// 1. Remove players from map and from hashmap.
 			ArrayList<User> copyOldList = (ArrayList<User>) oldList.clone();
@@ -96,7 +93,6 @@ public class MapHandler {
 			Iterator<User> it = copyNewList.iterator();
 			while (it.hasNext()) {
 				User aUser = it.next();
-				Log.d("UPDATING MARKER", aUser.getUserId());
 				Marker aMarker = markersList.get(aUser);
 				LatLng coords = new LatLng(aUser.getxCoord(), aUser.getyCoord());
 				aMarker.setPosition(coords);
@@ -115,15 +111,9 @@ public class MapHandler {
 
 					if (aUser.isAlien()) {
 						this.currUserIcon = alienIcon;
-						System.out.println("Setting otherIcon ALIEN"
-								+ aUser.getRace());
 					} else if (aUser.isMarine()) {
-						System.out.println("Setting otehricon MARINE"
-								+ aUser.getRace());
 						this.currUserIcon = marinesIcon;
 					} else {
-						System.out.println("Setting othericon EVAC"
-								+ aUser.getRace());
 						this.currUserIcon = evacIcon;
 					}
 					Marker newMarker = map.addMarker(new MarkerOptions()
@@ -142,7 +132,6 @@ public class MapHandler {
 			// Make list update;
 			oldList = newList;
 		}
-		System.out.println("__DONE UPDATEPLAYERS___");
 	}
 
 	public void setUpdatedOponenList(ArrayList<User> newList) {

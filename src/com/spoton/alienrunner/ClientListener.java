@@ -64,7 +64,6 @@ public class ClientListener extends Thread {
 
 	private ArrayList<User> jsonToUser(String answer) {
 		String databaseString = answer;
-		System.out.println("______jSonToUser_" + databaseString);
 		databaseString = databaseString.replace("[", "");
 		databaseString = databaseString.replace("]", "");
 		databaseString = databaseString.replace("\"", "");

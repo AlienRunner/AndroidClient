@@ -9,6 +9,7 @@ import android.content.pm.ActivityInfo;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -48,7 +49,7 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
 				.permitAll().build();
 		StrictMode.setThreadPolicy(policy);
-		
+
 		Intent i = getIntent();
 		String name = i.getStringExtra("name");
 		String race = i.getStringExtra("race");
@@ -75,30 +76,6 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 		this.mapHandler = new MapHandler(theMap, myUser, context);
 		mapHandler.gpsUpdate(lastLoc);
 		mapHandler.centerCamera();
-		
-		Toast customToast = new Toast(context);
-		if(this.myUser.isAlien()){			
-//		customToast = Toast.makeText(context,
-//				"Try to catch a marine!\n\n      Wip the phone!", Toast.LENGTH_LONG);
-//			customToast = Toast.makeText(context,"Try to catch a marine!\n\n      Wip the phone!", Toast.LENGTH_LONG);
-			customToast = Toast.makeText(context,
-					"\nTry to catch a marine!\n", Toast.LENGTH_LONG);
-			customToast.setGravity(Gravity.CENTER | Gravity.CENTER, 0,
-					0);
-		customToast.show();
-		}else{
-			customToast = Toast.makeText(context,
-				"\nGET TO THE CHOPPA!!\n", Toast.LENGTH_LONG);
-			customToast.setGravity(Gravity.CENTER | Gravity.CENTER, 0,
-					0);
-			customToast.show();
-		}
-		customToast = Toast.makeText(context,
-				"\nWip the phone!\n", Toast.LENGTH_LONG);
-			customToast.setGravity(Gravity.CENTER | Gravity.CENTER, 0,
-					0);
-		customToast.show();
-
 
 		System.out.println("Creating socket...");
 		try {
@@ -112,9 +89,10 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 				this.cs = new ClientSend(socket, myUser);
 				ClientListener updateMarker = new ClientListener(theMap,
 						handler, socket, mapHandler);
-				VibrateThread vt = new VibrateThread(context, handler, mapHandler);
+				VibrateThread vt = new VibrateThread(context, handler,
+						mapHandler);
 				vt.start();
-//				handler.postDelayed(vt, MARKER_UPDATE_INTERVAL);
+				// handler.postDelayed(vt, MARKER_UPDATE_INTERVAL);
 				handler.postDelayed(updateMarker, MARKER_UPDATE_INTERVAL);
 				cs.start();
 			} else {
@@ -123,6 +101,30 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		Toast customToast = new Toast(context);
+		if (this.myUser.isAlien()) {
+			// customToast = Toast.makeText(context,
+			// "Try to catch a marine!\n\n      Wip the phone!",
+			// Toast.LENGTH_LONG);
+			// customToast =
+			// Toast.makeText(context,"Try to catch a marine!\n\n      Wip the phone!",
+			// Toast.LENGTH_LONG);
+			customToast = Toast.makeText(context, "\nTry to catch a marine!\n",
+					Toast.LENGTH_LONG);
+			customToast.setGravity(Gravity.CENTER | Gravity.CENTER, 0, 0);
+			customToast.show();
+		} else {
+			customToast = Toast.makeText(context, "\nGET TO THE CHOPPA!!\n",
+					Toast.LENGTH_LONG);
+			customToast.setGravity(Gravity.CENTER | Gravity.CENTER, 0, 0);
+			customToast.show();
+			MediaPlayer mp = MediaPlayer.create(context, R.raw.choppa);
+			mp.start();
+		}
+		customToast = Toast.makeText(context, "\nWip the phone!\n",
+				Toast.LENGTH_LONG);
+		customToast.setGravity(Gravity.CENTER | Gravity.CENTER, 0, 0);
+		customToast.show();
 		this.sm = new SensorMonitor(mapHandler, context, myUser);
 	}
 
