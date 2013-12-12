@@ -20,7 +20,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapHandler {
 	private int marinesIcon, alienIcon, alienUserIcon, marinesUserIcon,
-			userIcon, currUserIcon;
+			userIcon, currUserIcon, evacIcon;
 	private Marker myMarker;
 	private GoogleMap map;
 	public User myUser;
@@ -41,7 +41,8 @@ public class MapHandler {
 		alienIcon = R.drawable.alien_point;
 		alienUserIcon = R.drawable.broodmother_point;
 		marinesUserIcon = R.drawable.arnold_point;
-		if (myUser.getRace().equals("Alien")) {
+		evacIcon = R.drawable.blue_point;
+		if (myUser.isAlien()) {
 			this.userIcon = alienUserIcon;
 			System.out.println("Setting icon ALIEN" + myUser.getRace());
 		} else {
@@ -112,16 +113,19 @@ public class MapHandler {
 					// Display new Marker on Gmap
 					aUser = it2.next();
 
-					if (aUser.getRace().equals("Alien")) {
+					if (aUser.isAlien()) {
 						this.currUserIcon = alienIcon;
 						System.out.println("Setting otherIcon ALIEN"
-								+ myUser.getRace());
-					} else {
-						System.out.println("Setting con ARNOLD"
-								+ myUser.getRace());
+								+ aUser.getRace());
+					} else if(aUser.isMarine()){
+						System.out.println("Setting otehricon MARINE"
+								+ aUser.getRace());
 						this.currUserIcon = marinesIcon;
+					}else{
+						System.out.println("Setting othericon EVAC"
+								+ aUser.getRace());
+						this.currUserIcon = evacIcon;
 					}
-					checkIconType(aUser);
 					Marker newMarker = map.addMarker(new MarkerOptions()
 							.position(
 									new LatLng(aUser.getxCoord(), aUser
@@ -143,15 +147,6 @@ public class MapHandler {
 
 	public void setUpdatedOponenList(ArrayList<User> newList) {
 		this.newList = newList;
-	}
-
-	private void checkIconType(User user) {
-		System.out.println("_____CURRRACE_____" + user.getRace());
-		if (user.getRace().toString() == "Alien") {
-			this.currUserIcon = alienIcon;
-		} else {
-			this.currUserIcon = marinesIcon;
-		}
 	}
 
 	public User getClosestUser() {

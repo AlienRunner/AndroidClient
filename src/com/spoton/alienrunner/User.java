@@ -66,6 +66,14 @@ public class User {//implements Serializable{
 		return(this.race.equals("Alien"));
 	}
 	
+	public boolean isMarine(){
+		return(this.race.equals("Marines"));
+	}
+	
+	public boolean isEvac(){
+		return(this.race.equals("Evac"));
+	}
+	
 	public String encrypt(){
 		String userString = "[" + userId + "," + xCoord
 		+ "," + yCoord + "," + race + "]";
