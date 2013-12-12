@@ -41,7 +41,7 @@ public class MapHandler {
 		alienIcon = R.drawable.alien_point;
 		alienUserIcon = R.drawable.broodmother_point;
 		marinesUserIcon = R.drawable.arnold_point;
-		evacIcon = R.drawable.blue_point;
+		evacIcon = R.drawable.purple_point;
 		if (myUser.isAlien()) {
 			this.userIcon = alienUserIcon;
 			System.out.println("Setting icon ALIEN" + myUser.getRace());

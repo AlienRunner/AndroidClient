@@ -66,6 +66,7 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 			if (theMap != null) {
 				System.out.println("KARTAN €R LADDAD!");
 				theMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+				theMap.setMyLocationEnabled(true);
 			}
 		}
 
