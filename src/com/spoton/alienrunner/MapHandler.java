@@ -133,17 +133,17 @@ public class MapHandler {
 			if (copyNewList.size() > 0) {
 				Iterator<User> it2 = copyNewList.iterator();
 				System.out.println("___Done cloning for 3!");
-
+				User aUser;
 				while (it2.hasNext()) {
 					// Display new Marker on Gmap
-					User aUser = it2.next();
+					aUser = it2.next();
 
 					if (aUser.getRace().equals("Alien")) {
 						this.currUserIcon = alienIcon;
-						System.out.println("Setting icon ALIEN"
+						System.out.println("Setting otherIcon ALIEN"
 								+ myUser.getRace());
 					} else {
-						System.out.println("Setting icon ARNOLD"
+						System.out.println("Setting con ARNOLD"
 								+ myUser.getRace());
 						this.currUserIcon = marinesIcon;
 					}
@@ -203,7 +203,9 @@ public class MapHandler {
 		}
 		return listUser;
 	}
-
+	
+	// @return distance to the closest person on the map.
+	// in Meter!
 	public double getLeastDistance() {
 		Iterator<User> iter = oldList.iterator();
 		double dist = Double.MAX_VALUE;
@@ -226,9 +228,10 @@ public class MapHandler {
 				* Math.sin(Math.toRadians(x2)) + Math.cos(Math.toRadians(x1))
 				* Math.cos(Math.toRadians(x2))
 				* Math.cos(Math.toRadians(y1 - y2)));
-		return (Math.toDegrees(Math.acos(theDistance)) * 69.09 * 1.6093);
-		// return (Math.toDegrees(Math.acos(theDistance)) * 69.09 * 1.6093);
+//		return (Math.toDegrees(Math.acos(theDistance)));
+		return Math.round((Math.toDegrees(Math.acos(theDistance)) * 69.09 * 1.6093*1000));
 	}
+	
 
 	public void getList(ClientListener clientListener) {
 		newList = clientListener.fetchTheList();

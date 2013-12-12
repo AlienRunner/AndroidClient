@@ -36,6 +36,7 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 	final int MARKER_UPDATE_INTERVAL = 2000;
 	final Handler handler = new Handler(Looper.getMainLooper());
 	Marker marker;
+	SensorMonitor sm;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +101,8 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		this.sm = new SensorMonitor(mapHandler, context, myUser);
 	}
 
 	@Override
