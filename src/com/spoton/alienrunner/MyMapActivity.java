@@ -67,6 +67,7 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 				System.out.println("KARTAN €R LADDAD!");
 				theMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 				theMap.setMyLocationEnabled(true);
+				theMap.setBuildingsEnabled(true);
 			}
 		}
 
@@ -77,14 +78,25 @@ public class MyMapActivity extends FragmentActivity implements LocationListener 
 		
 		Toast customToast = new Toast(context);
 		if(this.myUser.isAlien()){			
-		customToast = Toast.makeText(context,
-				"Try to catch a marine!", Toast.LENGTH_LONG);
+//		customToast = Toast.makeText(context,
+//				"Try to catch a marine!\n\n      Wip the phone!", Toast.LENGTH_LONG);
+//			customToast = Toast.makeText(context,"Try to catch a marine!\n\n      Wip the phone!", Toast.LENGTH_LONG);
+			customToast = Toast.makeText(context,
+					"\nTry to catch a marine!\n", Toast.LENGTH_LONG);
+			customToast.setGravity(Gravity.CENTER | Gravity.CENTER, 0,
+					0);
+		customToast.show();
 		}else{
 			customToast = Toast.makeText(context,
-				"GET TO THE CHOPPA!!", Toast.LENGTH_LONG);
+				"\nGET TO THE CHOPPA!!\n", Toast.LENGTH_LONG);
+			customToast.setGravity(Gravity.CENTER | Gravity.CENTER, 0,
+					0);
+			customToast.show();
 		}
-		customToast.setGravity(Gravity.CENTER | Gravity.CENTER, 0,
-				0);
+		customToast = Toast.makeText(context,
+				"\nWip the phone!\n", Toast.LENGTH_LONG);
+			customToast.setGravity(Gravity.CENTER | Gravity.CENTER, 0,
+					0);
 		customToast.show();
 
 

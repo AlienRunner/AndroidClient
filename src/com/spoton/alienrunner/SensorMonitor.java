@@ -67,10 +67,10 @@ public class SensorMonitor implements SensorEventListener {
 					} else {
 						customToast = Toast
 								.makeText(context,
-										"Try to get closer to the Marine! \n           Still  "
+										"Try to get closer to the Marine! \n\n                 "
 												+ dist + " m left.",
 										Toast.LENGTH_SHORT);
-						customToast.setGravity(Gravity.BOTTOM | Gravity.CENTER,
+						customToast.setGravity(Gravity.CENTER | Gravity.CENTER,
 								0, 0);
 						customToast.show();
 					}
@@ -82,7 +82,7 @@ public class SensorMonitor implements SensorEventListener {
 			}else{
 					customToast = Toast.makeText(context,
 							"THERE IS NO MARINE!!!", Toast.LENGTH_SHORT);
-					customToast.setGravity(Gravity.BOTTOM | Gravity.CENTER,
+					customToast.setGravity(Gravity.CENTER | Gravity.CENTER,
 							0, 0);
 					customToast.show();
 				}
@@ -114,9 +114,9 @@ public class SensorMonitor implements SensorEventListener {
 						customToast.show();
 					} else {
 						customToast = Toast.makeText(context,
-								"GET TO THE CHOPPA!!! \n     " + dist
+								"GET TO THE CHOPPA!!! \n\n       " + dist
 										+ " m left.", Toast.LENGTH_SHORT);
-						customToast.setGravity(Gravity.BOTTOM | Gravity.CENTER,
+						customToast.setGravity(Gravity.CENTER | Gravity.CENTER,
 								0, 0);
 						customToast.show();
 					}
@@ -127,7 +127,7 @@ public class SensorMonitor implements SensorEventListener {
 				}else{
 					customToast = Toast.makeText(context,
 							"THERE IS NO CHOPPA!!!", Toast.LENGTH_SHORT);
-					customToast.setGravity(Gravity.BOTTOM | Gravity.CENTER,
+					customToast.setGravity(Gravity.CENTER | Gravity.CENTER,
 							0, 0);
 					customToast.show();
 				}
